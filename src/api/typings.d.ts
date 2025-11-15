@@ -188,6 +188,8 @@ declare namespace API {
     shareCode?: string
     /** 手机号 */
     phoneNumber?: number
+    /** 会员兑换码 */
+    vipCode?: string
     /** 邮箱 */
     email?: string
     /** 手机国家代码 */
@@ -230,6 +232,10 @@ declare namespace API {
     userName?: string
     /** 用户账号 */
     userAccount?: string
+    /** 用户头像 */
+    userAvatar?: string
+    /** 会员兑换码 */
+    vipCode?: string
     /** 用户简介 */
     userProfile?: string
     /** 用户角色 */

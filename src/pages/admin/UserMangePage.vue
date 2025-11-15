@@ -8,11 +8,11 @@
       <a-form-item label="会员编号">
         <a-input v-model:value="searchParams.vipNumber" placeholder="输入会员编号" allow-clear />
       </a-form-item>
-      <a-form-item label="vipLevel">
+      <a-form-item label="会员等级">
         <a-radio-group v-model:value="searchParams.vipLevel">
-          <a-radio value="standard" name="type" @click="toggleVipLevel('standard')">standard</a-radio>
-          <a-radio value="pro" name="type" @click="toggleVipLevel('pro')">pro</a-radio>
-          <a-radio value="max" name="type" @click="toggleVipLevel('max')">max</a-radio>
+          <a-radio value="standard" name="type" @click="toggleVipLevel('standard')">普通会员</a-radio>
+          <a-radio value="pro" name="type" @click="toggleVipLevel('pro')">专业会员</a-radio>
+          <a-radio value="max" name="type" @click="toggleVipLevel('max')">超级会员</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item label="账号">
@@ -32,7 +32,10 @@
       </a-form-item>
       <a-form-item label="分享码">
         <a-input v-model:value="searchParams.shareCode" placeholder="输入分享码" allow-clear />
-      </a-form-item>|
+      </a-form-item>
+      <a-form-item label="兑换码">
+        <a-input v-model:value="searchParams.vipCode" placeholder="输入兑换码" allow-clear />
+      </a-form-item>
       <a-form-item label="邀请人id">
         <a-input v-model:value="searchParams.inviteUser" placeholder="输入邀请人id" allow-clear />
       </a-form-item>
@@ -97,12 +100,51 @@
           {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template v-else-if="column.key === 'action'">
-          <!-- <a-button type="primary">编辑</a-button> -->
+          <a-button type="primary" @click="openEdit(record)">编辑</a-button>
           <!-- 有时间一定要完成这个东西 -->
           <a-button danger @click="doDelete(record.id)">删除</a-button>
         </template>
       </template>
     </a-table>
+    <a-modal v-model:open="editVisible" title="编辑用户" @ok="submitEdit" @cancel="closeEdit" :destroyOnClose="true">
+      <a-form :model="editForm" layout="vertical">
+        <a-form-item label="用户昵称">
+          <a-input v-model:value="editForm.userName" placeholder="输入用户昵称" allow-clear />
+        </a-form-item>
+        <a-form-item label="头像URL">
+          <a-input v-model:value="editForm.userAvatar" placeholder="输入头像URL" allow-clear />
+        </a-form-item>
+        <a-form-item label="用户简介">
+          <a-input v-model:value="editForm.userProfile" placeholder="输入用户简介" allow-clear />
+        </a-form-item>
+        <a-form-item label="用户角色">
+          <a-select v-model:value="editForm.userRole" allow-clear placeholder="选择用户角色">
+            <a-select-option value="user">普通用户</a-select-option>
+            <a-select-option value="vip">会员用户</a-select-option>
+            <a-select-option value="admin">管理员</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="会员等级">
+          <a-select v-model:value="editForm.vipLevel" allow-clear placeholder="选择会员等级">
+            <a-select-option value="standard">普通会员</a-select-option>
+            <a-select-option value="pro">专业会员</a-select-option>
+            <a-select-option value="max">超级会员</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="会员编号">
+          <a-input v-model:value="editForm.vipNumber" placeholder="输入会员编号" allow-clear />
+        </a-form-item>
+        <a-form-item label="手机国家代码">
+          <a-input v-model:value="editForm.phoneCountryCode" placeholder="输入手机国家代码" allow-clear />
+        </a-form-item>
+        <a-form-item label="手机号">
+          <a-input v-model:value="editForm.phoneNumber" placeholder="输入手机号" allow-clear />
+        </a-form-item>
+        <a-form-item label="邮箱">
+          <a-input v-model:value="editForm.email" placeholder="输入邮箱" allow-clear />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
@@ -113,6 +155,7 @@ import { message, type TableProps } from 'ant-design-vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import dayjs from 'dayjs';
 import { deleteUser } from '@/api/userController';
+import { updateUser } from '@/api/userController';
 // 说明：移除 vue-request 依赖，改用 AntD Table 原生分页与 onChange 事件处理，避免未安装依赖导致的报错
 
 const columns = [
@@ -193,6 +236,11 @@ const columns = [
     key: 'shareCode',
   },
   {
+    title: '兑换码',
+    dataIndex: 'vipCode',
+    key: 'exchangeCode',
+  },
+  {
     title: '创建时间',
     dataIndex: 'createTime',
     key: 'createTime',
@@ -263,14 +311,40 @@ const cleanParams = (params: Record<string, any>) => {
   })
   return out
 }
+const cleanParams4submitEdit = (params: Record<string, any>) => {
+  const out: Record<string, any> = {}
+  const textKeys = ['userName', 'userAvatar', 'userProfile', 'userRole', 'vipLevel', 'phoneCountryCode', 'email']
+  const numberKeys = ['vipNumber', 'phoneNumber']
 
+  out.id = params.id
+
+  // textKeys: 允许空字符串，只过滤 undefined 和 null
+  textKeys.forEach((k) => {
+    const v = params[k]
+    if (v !== undefined && v !== null) {
+      out[k] = v
+    }
+  })
+
+  // numberKeys: 空值传 null，有效数字传数字
+  numberKeys.forEach((k) => {
+    const v = params[k]
+    if (v === '' || v === undefined || v === null) {
+      out[k] = null
+      return
+    }
+    const n = typeof v === 'string' ? Number(v) : v
+    if (Number.isFinite(n)) out[k] = n
+    else out[k] = null  // 无效数字也传 null
+  })
+
+  return out
+}
 const fetchData = async () => {
   const payload = cleanParams({
     ...searchParams,
-    // id: normalizeNumber(searchParams.id),
     vipNumber: normalizeNumber(searchParams.vipNumber),
     phoneNumber: normalizeNumber(searchParams.phoneNumber),
-    // inviteUser: normalizeNumber(searchParams.inviteUser),
     sortField: searchParams.sortField,
   })
 
@@ -330,6 +404,50 @@ const doDelete = async (id: number) => {
     fetchData()
   } else {
     message.error('删除用户失败' + (data?.message ?? '未知错误'))
+  }
+}
+
+const editVisible = ref(false)
+const editForm = reactive<Partial<API.UserUpdateRequest & { id: number }>>({})
+
+const openEdit = (record: API.UserVO) => {
+  editForm.id = record.id as number
+  editForm.userName = record.userName
+  editForm.userAvatar = record.userAvatar
+  editForm.userProfile = record.userProfile
+  editForm.userRole = record.userRole
+  editForm.vipLevel = record.vipLevel
+  editForm.vipNumber = record.vipNumber as number
+  editForm.phoneCountryCode = record.phoneCountryCode
+  editForm.phoneNumber = record.phoneNumber as number
+  editForm.email = record.email
+  editVisible.value = true
+}
+
+const closeEdit = () => {
+  editVisible.value = false
+}
+
+const submitEdit = async () => {
+  const payload = cleanParams4submitEdit({
+    id: editForm.id,
+    userName: editForm.userName,
+    userAvatar: editForm.userAvatar,
+    userProfile: editForm.userProfile,
+    userRole: editForm.userRole,
+    vipLevel: editForm.vipLevel,
+    vipNumber: editForm.vipNumber,
+    phoneCountryCode: editForm.phoneCountryCode,
+    phoneNumber: editForm.phoneNumber,
+    email: editForm.email,
+  }) as API.UserUpdateRequest
+  const { data } = await updateUser(payload)
+  if (data && data.code === 0) {
+    message.success('更新用户成功')
+    editVisible.value = false
+    fetchData()
+  } else {
+    message.error('更新用户失败' + (data?.message ?? '未知错误'))
   }
 }
 
