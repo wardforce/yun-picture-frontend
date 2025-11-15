@@ -182,12 +182,22 @@ declare namespace API {
     vipLevel?: string
     /** 会员过期时间 */
     vipExpireTime?: string
+    /** 邀请人id */
+    inviteUser?: number
+    /** 分享码 */
+    shareCode?: string
     /** 手机号 */
     phoneNumber?: number
     /** 邮箱 */
     email?: string
     /** 手机国家代码 */
     phoneCountryCode?: string
+    /** 编辑时间 */
+    editTime?: string
+    /** 创建时间 */
+    createTime?: string
+    /** 更新时间 */
+    updateTime?: string
   }
 
   type UserRegisterRequest = {
@@ -214,13 +224,37 @@ declare namespace API {
   }
 
   type UserVO = {
+    /** 用户id */
     id?: number
-    userAccount?: string
+    /** 用户昵称 */
     userName?: string
-    userAvatar?: string
+    /** 用户账号 */
+    userAccount?: string
+    /** 用户简介 */
     userProfile?: string
+    /** 用户角色 */
     userRole?: string
+    /** 用户vip编号 */
+    vipNumber?: number
+    /** 用户vip等级 */
     vipLevel?: string
+    /** 会员过期时间 */
+    vipExpireTime?: string
+    /** 邀请人id */
+    inviteUser?: number
+    /** 分享码 */
+    shareCode?: string
+    /** 手机号 */
+    phoneNumber?: number
+    /** 邮箱 */
+    email?: string
+    /** 手机国家代码 */
+    phoneCountryCode?: string
+    /** 编辑时间 */
+    editTime?: string
+    /** 创建时间 */
     createTime?: string
+    /** 更新时间 */
+    updateTime?: string
   }
 }

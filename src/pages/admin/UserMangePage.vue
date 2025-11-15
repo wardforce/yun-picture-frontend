@@ -30,6 +30,12 @@
       <a-form-item label="邮箱">
         <a-input v-model:value="searchParams.email" placeholder="输入邮箱" allow-clear />
       </a-form-item>
+      <a-form-item label="分享码">
+        <a-input v-model:value="searchParams.shareCode" placeholder="输入分享码" allow-clear />
+      </a-form-item>|
+      <a-form-item label="邀请人id">
+        <a-input v-model:value="searchParams.inviteUser" placeholder="输入邀请人id" allow-clear />
+      </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit" @click="doSearch">搜索</a-button>
       </a-form-item>
@@ -87,6 +93,9 @@
         <template v-else-if="column.key === 'createTime'">
           {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
+        <template v-else-if="column.key === 'updateTime'">
+          {{ dayjs(record.updateTime).format('YYYY-MM-DD HH:mm:ss') }}
+        </template>
         <template v-else-if="column.key === 'action'">
           <!-- <a-button type="primary">编辑</a-button> -->
           <!-- 有时间一定要完成这个东西 -->
@@ -98,12 +107,12 @@
 </template>
 <script lang="ts" setup>
 // 接口：用户分页查询（由 openapi 生成）
-import { listUserPageVoByPage } from '@/api/UserController';
+import { listUserPageVoByPage } from '@/api/userController';
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { message, type TableProps } from 'ant-design-vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import dayjs from 'dayjs';
-import { deleteUser } from '@/api/UserController';
+import { deleteUser } from '@/api/userController';
 // 说明：移除 vue-request 依赖，改用 AntD Table 原生分页与 onChange 事件处理，避免未安装依赖导致的报错
 
 const columns = [
@@ -173,9 +182,26 @@ const columns = [
     sorter: true,
   },
   {
+    title: '邀请人id',
+    dataIndex: 'inviteUser',
+    key: 'inviteUser',
+    sorter: true,
+  },
+  {
+    title: '分享码',
+    dataIndex: 'shareCode',
+    key: 'shareCode',
+  },
+  {
     title: '创建时间',
     dataIndex: 'createTime',
     key: 'createTime',
+    sorter: true,
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updateTime',
+    key: 'updateTime',
     sorter: true,
   },
   {
@@ -228,6 +254,7 @@ const fetchData = async () => {
     id: normalizeNumber(searchParams.id),
     vipNumber: normalizeNumber(searchParams.vipNumber),
     phoneNumber: normalizeNumber(searchParams.phoneNumber),
+    inviteUser: normalizeNumber(searchParams.inviteUser),
     sortField: searchParams.sortField,
   })
 
@@ -291,7 +318,3 @@ const doDelete = async (id: number) => {
 }
 
 </script>
-
-function deleteUserById(id: number): { data: any; }|PromiseLike<{ data: any; }> {
-  throw new Error('Function not implemented.');
-  }
