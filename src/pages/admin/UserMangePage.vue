@@ -5,8 +5,8 @@
       <a-form-item label="id">
         <a-input v-model:value="searchParams.id" placeholder="输入id" allow-clear />
       </a-form-item>
-      <a-form-item label="vipNumber">
-        <a-input v-model:value="searchParams.vipNumber" placeholder="输入vipNumber" allow-clear />
+      <a-form-item label="会员编号">
+        <a-input v-model:value="searchParams.vipNumber" placeholder="输入会员编号" allow-clear />
       </a-form-item>
       <a-form-item label="vipLevel">
         <a-radio-group v-model:value="searchParams.vipLevel">
@@ -156,8 +156,8 @@ const columns = [
   },
   {
     title: '手机号',
-    dataIndex: 'userPhone',
-    key: 'userPhone',
+    dataIndex: 'phoneNumber',
+    key: 'phoneNumber',
   },
   {
     title: '邮箱',
@@ -166,8 +166,8 @@ const columns = [
   },
   {
     title: '会员编号',
-    dataIndex: 'vipId',
-    key: 'vipId',
+    dataIndex: 'vipNumber',
+    key: 'vipNumber',
     sorter: true,
   },
   {
@@ -217,6 +217,22 @@ const searchParams = reactive<API.UserQueryRequest>({
   pageSize: 10,
   sortField: undefined,
   sortOrder: undefined,
+  id: undefined,
+  userName: undefined,
+  userAccount: undefined,
+  userProfile: undefined,
+  userRole: undefined,
+  vipNumber: undefined,
+  vipLevel: undefined,
+  vipExpireTime: undefined,
+  inviteUser: undefined,
+  shareCode: undefined,
+  phoneNumber: undefined,
+  email: undefined,
+  phoneCountryCode: undefined,
+  editTime: undefined,
+  createTime: undefined,
+  updateTime: undefined,
 })
 
 // 表格分页对象（绑定到 Table 的 pagination 属性）
@@ -251,10 +267,10 @@ const cleanParams = (params: Record<string, any>) => {
 const fetchData = async () => {
   const payload = cleanParams({
     ...searchParams,
-    id: normalizeNumber(searchParams.id),
+    // id: normalizeNumber(searchParams.id),
     vipNumber: normalizeNumber(searchParams.vipNumber),
     phoneNumber: normalizeNumber(searchParams.phoneNumber),
-    inviteUser: normalizeNumber(searchParams.inviteUser),
+    // inviteUser: normalizeNumber(searchParams.inviteUser),
     sortField: searchParams.sortField,
   })
 
