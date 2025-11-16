@@ -134,6 +134,10 @@
         <a-form-item label="会员编号">
           <a-input v-model:value="editForm.vipNumber" placeholder="输入会员编号" allow-clear />
         </a-form-item>
+        <a-form-item name="date-time-picker" label="会员过期时间" v-bind="config">
+          <a-date-picker v-model:value="editForm.vipExpireTime" show-time format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss" />
+        </a-form-item>
         <a-form-item label="手机国家代码">
           <a-input v-model:value="editForm.phoneCountryCode" placeholder="输入手机国家代码" allow-clear />
         </a-form-item>
@@ -313,7 +317,7 @@ const cleanParams = (params: Record<string, any>) => {
 }
 const cleanParams4submitEdit = (params: Record<string, any>) => {
   const out: Record<string, any> = {}
-  const textKeys = ['userName', 'userAvatar', 'userProfile', 'userRole', 'vipLevel', 'phoneCountryCode', 'email']
+  const textKeys = ['userName', 'userAvatar', 'userProfile', 'userRole', 'vipLevel', 'phoneCountryCode', 'email', 'vipExpireTime']
   const numberKeys = ['vipNumber', 'phoneNumber']
 
   out.id = params.id
@@ -323,6 +327,8 @@ const cleanParams4submitEdit = (params: Record<string, any>) => {
     const v = params[k]
     if (v !== undefined && v !== null) {
       out[k] = v
+    } else {
+      out[k] = null
     }
   })
 
@@ -421,6 +427,7 @@ const openEdit = (record: API.UserVO) => {
   editForm.phoneCountryCode = record.phoneCountryCode
   editForm.phoneNumber = record.phoneNumber as number
   editForm.email = record.email
+  editForm.vipExpireTime = record.vipExpireTime
   editVisible.value = true
 }
 
@@ -440,6 +447,7 @@ const submitEdit = async () => {
     phoneCountryCode: editForm.phoneCountryCode,
     phoneNumber: editForm.phoneNumber,
     email: editForm.email,
+    vipExpireTime: editForm.vipExpireTime,
   }) as API.UserUpdateRequest
   const { data } = await updateUser(payload)
   if (data && data.code === 0) {
@@ -450,5 +458,8 @@ const submitEdit = async () => {
     message.error('更新用户失败' + (data?.message ?? '未知错误'))
   }
 }
+const config = {
+  rules: [{ type: 'string' as const, required: true, message: '请选择会员过期时间' }],
+};
 
 </script>

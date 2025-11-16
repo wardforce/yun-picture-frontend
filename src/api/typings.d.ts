@@ -219,10 +219,16 @@ declare namespace API {
     userRole?: string
     /** 用户vip编号 */
     vipNumber?: number
+    /** 用户手机号 */
     phoneNumber?: number
+    /** 用户邮箱 */
     email?: string
+    /** 用户vip等级 */
     vipLevel?: string
+    /** 用户手机号国家代码 */
     phoneCountryCode?: string
+    /** 会员过期时间 */
+    vipExpireTime?: string
   }
 
   type UserVO = {
