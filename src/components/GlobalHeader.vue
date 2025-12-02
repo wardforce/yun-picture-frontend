@@ -24,7 +24,12 @@
           - :items 传入菜单数据（见 script 部分 items）
           - @click 绑定点击事件（参数通常为 { key }）
         -->
-        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="doMenuClick" />
+        <a-menu
+          v-model:selectedKeys="current"
+          mode="horizontal"
+          :items="items"
+          @click="doMenuClick"
+        />
       </a-col>
 
       <!-- 右侧：登录按钮（跳转到用户登录页面） -->
@@ -33,14 +38,18 @@
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-              <a-avatar v-if="loginUserStore.loginUser.userAvatar" :src="loginUserStore.loginUser.userAvatar"
-                size="large"><template #icon>
-                  <AntDesignOutlined />
-                </template></a-avatar>
-              <a-avatar v-else size="large"><template #icon>
+              <a-avatar
+                v-if="loginUserStore.loginUser.userAvatar"
+                :src="loginUserStore.loginUser.userAvatar"
+                size="large"
+                ><template #icon>
+                  <AntDesignOutlined /> </template
+              ></a-avatar>
+              <a-avatar v-else size="large"
+                ><template #icon>
                   {{ loginUserStore.loginUser.userName?.[0] ?? 'momo' }}
-                  <AntDesignOutlined />
-                </template></a-avatar>
+                  <AntDesignOutlined /> </template
+              ></a-avatar>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
@@ -76,7 +85,6 @@
             <a-button type="primary" href="/user/login">登录/注册</a-button>
           </div>
         </div>
-
       </a-col>
     </a-row>
   </div>
@@ -91,12 +99,20 @@
  */
 
 import { computed, h, ref } from 'vue'
-import { HomeOutlined, LogoutOutlined, UserOutlined, UsergroupAddOutlined, BellOutlined, ProjectOutlined, HeartOutlined } from '@ant-design/icons-vue'
+import {
+  HomeOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  UsergroupAddOutlined,
+  BellOutlined,
+  ProjectOutlined,
+  HeartOutlined,
+} from '@ant-design/icons-vue'
 import type { MenuProps } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '../stores/useLoginUserStore'
-import { AntDesignOutlined } from '@ant-design/icons-vue';
+import { AntDesignOutlined } from '@ant-design/icons-vue'
 import { userLogout } from '../api/UserController'
 import menu from 'ant-design-vue/es/menu'
 const loginUserStore = useLoginUserStore()
@@ -158,6 +174,16 @@ const originItems = [
     label: '用户管理',
     title: '用户管理',
   },
+  {
+    key: '/add_picture',
+    label: '创建图片',
+    title: '创建图片',
+  },
+  {
+    key: 'others',
+    label: h('a', { href: 'https://github.com/wardbit', target: '_blank' }, 'GitHub'),
+    title: '编程导航',
+  },
 ]
 // 管理员才能看到admin菜单
 const filterMenus = (menus = [] as MenuProps['items']) => {
@@ -168,8 +194,7 @@ const filterMenus = (menus = [] as MenuProps['items']) => {
     return true
   })
 }
-const items = computed(() => filterMenus(originItems)
-)
+const items = computed(() => filterMenus(originItems))
 /**
  * 用户退出
  */

@@ -17,9 +17,39 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePagePicture = {
+    code?: number
+    data?: PagePicture
+    message?: string
+  }
+
+  type BaseResponsePagePictureVO = {
+    code?: number
+    data?: PagePictureVO
+    message?: string
+  }
+
   type BaseResponsePageUserVO = {
     code?: number
     data?: PageUserVO
+    message?: string
+  }
+
+  type BaseResponsePicture = {
+    code?: number
+    data?: Picture
+    message?: string
+  }
+
+  type BaseResponsePictureTagCategory = {
+    code?: number
+    data?: PictureTagCategory
+    message?: string
+  }
+
+  type BaseResponsePictureVO = {
+    code?: number
+    data?: PictureVO
     message?: string
   }
 
@@ -45,11 +75,21 @@ declare namespace API {
     id?: number
   }
 
+  type getPictureByIdParams = {
+    id: number
+  }
+
+  type getPictureVOByIdParams = {
+    id: number
+  }
+
   type getUserByIdParams = {
+    /** 用户ID */
     id: number
   }
 
   type getUserVOByIdParams = {
+    /** 用户ID */
     id: number
   }
 
@@ -64,7 +104,10 @@ declare namespace API {
     createTime?: string
     updateTime?: string
     vipExpireTime?: string
+    /** 会员编号 */
     vipNumber?: number
+    /** 会员等级 */
+    vipLevel?: string
     inviteUser?: number
     phoneNumber?: number
     email?: string
@@ -74,6 +117,34 @@ declare namespace API {
   type OrderItem = {
     column?: string
     asc?: boolean
+  }
+
+  type PagePicture = {
+    records?: Picture[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PagePicture
+    searchCount?: PagePicture
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PagePictureVO = {
+    records?: PictureVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PagePictureVO
+    searchCount?: PagePictureVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
   }
 
   type PageUserVO = {
@@ -88,6 +159,143 @@ declare namespace API {
     maxLimit?: number
     countId?: string
     pages?: number
+  }
+
+  type Picture = {
+    /** 图片 id */
+    id?: number
+    /** 图片 url */
+    url?: string
+    /** 图片名称 */
+    name?: string
+    /** 图片简介 */
+    introduction?: string
+    /** 图片分类 */
+    category?: string
+    /** 图片标签(JSON 数组) */
+    tags?: string
+    /** 图片体积(字节) */
+    picSize?: number
+    /** 图片宽度(像素) */
+    picWidth?: number
+    /** 图片高度(像素) */
+    picHeight?: number
+    /** 图片宽高比例 */
+    picScale?: number
+    /** 图片格式 */
+    picFormat?: string
+    /** 创建用户 id */
+    userId?: number
+    /** 创建时间 */
+    createTime?: string
+    /** 编辑时间 */
+    editTime?: string
+    /** 更新时间 */
+    updateTime?: string
+    /** 是否删除(0-未删除, 1-已删除) */
+    isDelete?: number
+  }
+
+  type PictureEditRequest = {
+    /** 图片id */
+    id: number
+    /** 图片名称 */
+    name?: string
+    /** 图片简介/描述 */
+    introduction?: string
+    /** 图片分类 */
+    category?: string
+    /** 图片标签列表 */
+    tags?: string[]
+  }
+
+  type PictureQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    /** 图片 id */
+    id: number
+    /** 图片名称 */
+    name?: string
+    /** 图片描述 */
+    introduction?: string
+    /** 图片分类 */
+    category?: string
+    /** 图片标签列表 */
+    tags?: string[]
+    /** 图片文件体积 */
+    picSize?: number
+    /** 图片宽度 */
+    picWidth?: number
+    /** 图片高度 */
+    picHeight?: number
+    /** 图片比例 */
+    picScale?: number
+    /** 图片格式 */
+    picFormat?: string
+    /** 搜索词（同时搜名称、简介等） */
+    searchText?: string
+    userId?: number
+  }
+
+  type PictureTagCategory = {
+    /** 图片标签列表 */
+    tagList?: string[]
+    /** 图片分类 */
+    categoryList?: string
+  }
+
+  type PictureUpdataRequest = {
+    /** 图片唯一标识符 */
+    id: number
+    /** 图片名称 */
+    name?: string
+    /** 图片描述 */
+    introduction?: string
+    /** 图片分类 */
+    category?: string
+    /** 图片标签列表 */
+    tags?: string[]
+  }
+
+  type PictureUploadRequest = {
+    /** 图片 id */
+    id?: number
+  }
+
+  type PictureVO = {
+    id?: number
+    url?: string
+    name?: string
+    introduction?: string
+    tags?: string[]
+    category?: string
+    picSize?: number
+    picWidth?: number
+    picHeight?: number
+    picScale?: number
+    picFormat?: string
+    userId?: number
+    createTime?: string
+    editTime?: string
+    updateTime?: string
+    /** 存储桶名称 */
+    bucket?: string
+    /** 图片minio名称 */
+    object?: string
+    user?: UserVO
+  }
+
+  type testDownloadFileParams = {
+    filepath: string
+  }
+
+  type uploadPictureParams = {
+    /** 图片文件 */
+    file?: any
+    /** 图片上传请求 */
+    pictureUploadRequest?: any
   }
 
   type User = {
@@ -145,7 +353,10 @@ declare namespace API {
     userRole?: 'user' | 'admin' | 'vip'
     /** VIP 编号 */
     vipNumber?: number
-    vipLevel?: string
+    /** 用户等级 */
+    vipLevel?: 'standard' | 'pro' | 'max'
+    /** 会员过期时间 */
+    vipExpireTime?: string
     /** 手机号 */
     phoneNumber?: number
     /** 邮箱 */
