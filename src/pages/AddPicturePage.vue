@@ -17,9 +17,10 @@
           :options="categoryOptions" />
       </a-form-item>
       <a-form-item name="tags" label="标签">
-        <a-select v-model:value="pictureForm.tags" placeholder="请选择图片标签" mode="tags" allow-clear
+        <a-select v-model:value="pictureForm.tags" placeholder="请输入图片标签" mode="tags" allow-clear
           :options="tagOptions" />
       </a-form-item>
+
       <a-form-item>
         <a-button type="primary" html-type="submit" style="width: 100%">提交</a-button>
       </a-form-item>

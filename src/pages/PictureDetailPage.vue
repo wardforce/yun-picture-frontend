@@ -137,6 +137,7 @@ const getPictureDetail = async () => {
   } catch (error: unknown) {
     message.error('获取图片详情失败' + (error as Error).message)
   }
+
 }
 
 // 处理下载

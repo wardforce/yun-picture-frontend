@@ -76,10 +76,12 @@ declare namespace API {
   }
 
   type getPictureByIdParams = {
+    /** 图片ID */
     id: number
   }
 
   type getPictureVOByIdParams = {
+    /** 图片ID */
     id: number
   }
 
@@ -194,6 +196,14 @@ declare namespace API {
     updateTime?: string
     /** 是否删除(0-未删除, 1-已删除) */
     isDelete?: number
+    /** 审核状态(0-待审核,1-通过,2-拒绝) */
+    reviewStatus?: number
+    /** 审核信息 */
+    reviewMessage?: string
+    /** 审核人 id */
+    reviewerId?: number
+    /** 审核时间 */
+    reviewTime?: string
   }
 
   type PictureEditRequest = {
@@ -237,6 +247,10 @@ declare namespace API {
     /** 搜索词（同时搜名称、简介等） */
     searchText?: string
     userId?: number
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+    reviewTime?: string
   }
 
   type PictureTagCategory = {
@@ -262,6 +276,8 @@ declare namespace API {
   type PictureUploadRequest = {
     /** 图片 id */
     id?: number
+    /** 图片url */
+    fileUrl?: string
   }
 
   type PictureVO = {
@@ -280,10 +296,6 @@ declare namespace API {
     createTime?: string
     editTime?: string
     updateTime?: string
-    /** 存储桶名称 */
-    bucket?: string
-    /** 图片minio名称 */
-    object?: string
     user?: UserVO
   }
 
@@ -291,10 +303,15 @@ declare namespace API {
     filepath: string
   }
 
+  type uploadPictureByUrlParams = {
+    /** 图片上传请求体中的元信息，如名称/标签/分类等 */
+    pictureUploadRequest?: any
+  }
+
   type uploadPictureParams = {
     /** 图片文件 */
     file?: any
-    /** 图片上传请求 */
+    /** 图片上传请求体中的元信息，如名称/标签/分类等 */
     pictureUploadRequest?: any
   }
 
