@@ -5,6 +5,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseInteger = {
+    code?: number
+    data?: number
+    message?: string
+  }
+
   type BaseResponseLoginUserVO = {
     code?: number
     data?: LoginUserVO
@@ -273,11 +279,22 @@ declare namespace API {
     tags?: string[]
   }
 
+  type PictureUploadByBatchRequest = {
+    /** 搜索文本 */
+    searchText?: string
+    /** 图片数量 */
+    count?: number
+    /** 图片名称前缀 */
+    namePrefix?: string
+  }
+
   type PictureUploadRequest = {
     /** 图片 id */
     id?: number
     /** 图片url */
     fileUrl?: string
+    /** 图片名称 */
+    picName?: string
   }
 
   type PictureVO = {

@@ -1,8 +1,17 @@
 <template>
   <div class="addPicturePage">
     <h2 style="margin-bottom: 16px;">{{ id ? '编辑图片' : '创建图片' }}</h2>
-    <!-- 图片上传组件 -->
-    <PictureUpload :picture="picture" :on-upload-success="onSuccess" />
+    <!-- 选择上传方式 -->
+    <a-tabs v-model:activeKey="uploadType">
+      <a-tab-pane key="file" tab="上传本地文件">
+        <!-- 图片上传组件 -->
+        <PictureUpload :picture="picture" :on-upload-success="onSuccess" />
+      </a-tab-pane>
+      <a-tab-pane key="url" tab="上传网络图片" force-render>
+        <!-- url图片上传组件 -->
+        <UrlPictureUpload :picture="picture" :on-upload-success="onSuccess" />
+      </a-tab-pane>
+    </a-tabs>
     <!-- 信息表单 -->
     <a-form name="pictureForm" v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
       <a-form-item name="name" label="名称">
@@ -35,6 +44,7 @@ import { message } from 'ant-design-vue'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 const picture = ref<API.PictureVO>()
+const uploadType = ref<'file' | 'url'>('file')
 /**
  * 上传成功后的回调
  * @param newPicture

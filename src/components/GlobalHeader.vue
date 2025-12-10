@@ -177,8 +177,8 @@ const originItems = [
   },
   {
     key: 'others',
-    label: h('a', { href: 'https://github.com/wardbit', target: '_blank' }, 'GitHub'),
-    title: '编程导航',
+    label: h('a', { href: 'https://github.com/wardforce', target: '_blank' }, 'GitHub'),
+    title: '关于作者',
   },
 ]
 // 管理员才能看到admin菜单

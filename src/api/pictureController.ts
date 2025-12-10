@@ -167,6 +167,21 @@ export async function uploadPicture(
   })
 }
 
+/** 批量上传图片,仅仅管理员可用 批量上传图片 POST /picture/upload/batch */
+export async function uploadPictureByBatch(
+  body: API.PictureUploadByBatchRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/picture/upload/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 通过url上传图片（可重新上传） 已存在同名时覆盖更新 POST /picture/upload/url */
 export async function uploadPictureByUrl(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
