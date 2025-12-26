@@ -11,6 +11,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListSpaceLevel = {
+    code?: number
+    data?: SpaceLevel[]
+    message?: string
+  }
+
   type BaseResponseLoginUserVO = {
     code?: number
     data?: LoginUserVO
@@ -35,6 +41,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageSpace = {
+    code?: number
+    data?: PageSpace
+    message?: string
+  }
+
+  type BaseResponsePageSpaceVO = {
+    code?: number
+    data?: PageSpaceVO
+    message?: string
+  }
+
   type BaseResponsePageUserVO = {
     code?: number
     data?: PageUserVO
@@ -56,6 +74,18 @@ declare namespace API {
   type BaseResponsePictureVO = {
     code?: number
     data?: PictureVO
+    message?: string
+  }
+
+  type BaseResponseSpace = {
+    code?: number
+    data?: Space
+    message?: string
+  }
+
+  type BaseResponseSpaceVO = {
+    code?: number
+    data?: SpaceVO
     message?: string
   }
 
@@ -88,6 +118,16 @@ declare namespace API {
 
   type getPictureVOByIdParams = {
     /** 图片ID */
+    id: number
+  }
+
+  type getSpaceByIdParams = {
+    /** 空间ID */
+    id: number
+  }
+
+  type getSpaceVOByIdParams = {
+    /** 空间ID */
     id: number
   }
 
@@ -155,6 +195,34 @@ declare namespace API {
     pages?: number
   }
 
+  type PageSpace = {
+    records?: Space[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageSpace
+    searchCount?: PageSpace
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PageSpaceVO = {
+    records?: SpaceVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageSpaceVO
+    searchCount?: PageSpaceVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
   type PageUserVO = {
     records?: UserVO[]
     total?: number
@@ -174,6 +242,8 @@ declare namespace API {
     id?: number
     /** 图片 url */
     url?: string
+    /** 缩略图url */
+    thumbnailUrl?: string
     /** 图片名称 */
     name?: string
     /** 图片简介 */
@@ -210,6 +280,8 @@ declare namespace API {
     reviewerId?: number
     /** 审核时间 */
     reviewTime?: string
+    /** 空间 id */
+    spaceId?: number
   }
 
   type PictureEditRequest = {
@@ -257,6 +329,10 @@ declare namespace API {
     reviewMessage?: string
     reviewerId?: number
     reviewTime?: string
+    /** 空间id */
+    spaceId?: number
+    /** 空间id是否为空 */
+    nullSpaceId?: boolean
   }
 
   type PictureTagCategory = {
@@ -295,11 +371,15 @@ declare namespace API {
     fileUrl?: string
     /** 图片名称 */
     picName?: string
+    /** 空间 id */
+    spaceId?: number
   }
 
   type PictureVO = {
     id?: number
     url?: string
+    /** 缩略图url */
+    thumbnailUrl?: string
     name?: string
     introduction?: string
     tags?: string[]
@@ -309,6 +389,86 @@ declare namespace API {
     picHeight?: number
     picScale?: number
     picFormat?: string
+    userId?: number
+    createTime?: string
+    editTime?: string
+    updateTime?: string
+    user?: UserVO
+    /** 空间 id */
+    spaceId?: number
+  }
+
+  type Space = {
+    /** 空间 id */
+    id?: number
+    /** 空间名称 */
+    spaceName?: string
+    /** 空间级别(0-普通版,1-专业版,2-旗舰版) */
+    spaceLevel?: number
+    /** 空间图片的最大总大小(字节) */
+    maxSize?: number
+    /** 空间图片的最大数量 */
+    maxCount?: number
+    /** 当前空间下图片的总大小(字节) */
+    totalSize?: number
+    /** 当前空间下的图片数量 */
+    totalCount?: number
+    /** 创建用户 id */
+    userId?: number
+    /** 创建时间 */
+    createTime?: string
+    /** 编辑时间 */
+    editTime?: string
+    /** 更新时间 */
+    updateTime?: string
+    /** 是否删除(0-未删除,1-已删除) */
+    isDelete?: number
+  }
+
+  type SpaceAddRequest = {
+    spaceName?: string
+    spaceLevel?: number
+  }
+
+  type SpaceEditRequest = {
+    id?: number
+    spaceName?: string
+  }
+
+  type SpaceLevel = {
+    value?: number
+    text?: string
+    maxCount?: number
+    maxSize?: number
+  }
+
+  type SpaceQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    id?: number
+    userId?: number
+    spaceName?: string
+    spaceLevel?: number
+  }
+
+  type SpaceUpdateRequest = {
+    id?: number
+    spaceName?: string
+    spaceLevel?: number
+    maxSize?: number
+    maxCount?: number
+  }
+
+  type SpaceVO = {
+    id?: number
+    spaceName?: string
+    spaceLevel?: number
+    maxSize?: number
+    maxCount?: number
+    totalSize?: number
+    totalCount?: number
     userId?: number
     createTime?: string
     editTime?: string

@@ -71,7 +71,7 @@
         <template v-if="column.dataIndex === 'reviewMessage'">
           <div>审核状态：{{ PIC_REVIEW_STATUS_MAP[record.reviewStatus] }}</div>
           <div>审核信息：{{ record.reviewMessage }}</div>
-          <div>审核人：{{ record.reviewId }}</div>
+          <div>审核人：{{ record.reviewerId }}</div>
           <div v-if="record.reviewTime">
             审核时间：{{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}
           </div>
@@ -137,6 +137,12 @@ const baseColumns = [
     key: 'name',
     sorter: true,
   },
+  // {
+  //   title: '空间id  ',
+  //   dataIndex: 'spaceId',
+  //   key: 'spaceId',
+  //   sorter: true,
+  // },
   {
     title: '简介',
     dataIndex: 'introduction',
@@ -250,6 +256,7 @@ const fetchData = async () => {
   const payload = cleanParams({
     ...searchParams,
     sortField: searchParams.sortField,
+    nullSpaceId: true
   })
 
   // 强制转换为 PictureQueryRequest，确保满足类型要求

@@ -52,6 +52,12 @@
                     <a href="javascript:;">我的订阅</a>
                   </a-menu-item>
                   <a-menu-item>
+                    <router-link to="/my_space">
+                      <UserOutlined />
+                      我的空间
+                    </router-link>
+                  </a-menu-item>
+                  <a-menu-item>
                     <BellOutlined />
                     <a href="javascript:;">我的通知</a>
                   </a-menu-item>
@@ -67,6 +73,7 @@
                     <LogoutOutlined />
                     <a href="javascript:;">退出登录</a>
                   </a-menu-item>
+
                 </a-menu>
               </template>
             </a-dropdown>
@@ -174,6 +181,11 @@ const originItems = [
     key: '/admin/pictureManage',
     label: '图片管理',
     title: '图片管理',
+  },
+  {
+    key: '/admin/spaceManage',
+    label: '空间管理',
+    title: '空间管理',
   },
   {
     key: 'others',

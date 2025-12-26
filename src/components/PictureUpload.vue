@@ -19,6 +19,7 @@ import type { UploadChangeParam, UploadProps } from 'ant-design-vue'
 import { uploadPicture } from '@/api/pictureController'
 interface Props {
   picture?: API.PictureVO
+  spaceId?: number
   onUploadSuccess?: (picture: API.PictureVO) => void
 }
 const props = defineProps<Props>()
@@ -28,6 +29,7 @@ const props = defineProps<Props>()
 const handleUpload = async ({ file }: any) => {
   loading.value = true
   const parmas = props.picture ? { id: props.picture.id.valueOf() } : {}
+  parmas.spaceId = props.spaceId
   const res = await uploadPicture(parmas, {}, file)
   try {
     if (res.data.code === 0 && res.data.data) {

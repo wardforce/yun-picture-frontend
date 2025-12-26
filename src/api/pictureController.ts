@@ -86,6 +86,21 @@ export async function listPictureVoByPage(
   })
 }
 
+/** 分页获取图片列表（VO） 限制单页大小不超过20 POST /picture/list/page/vo/cache */
+export async function listPictureVoByPageCache(
+  body: API.PictureQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/picture/list/page/vo/cache', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 审核图片 审核图片 POST /picture/review */
 export async function doPictureReview(
   body: API.PictureUpdataRequest,

@@ -123,7 +123,10 @@ const doEdit = () => {
   }
   router.push({
     path: '/add_picture',
-    query: { id: String(picture.value.id) }
+    query: {
+      id: String(picture.value.id),
+      spaceId: picture.value.spaceId
+    }
   })
 }
 const getPictureDetail = async () => {
