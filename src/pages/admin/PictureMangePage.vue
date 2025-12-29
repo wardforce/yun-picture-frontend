@@ -4,10 +4,12 @@
       <h2>图片管理</h2>
       <a-space>
         <a-button type="primary" href="/add_picture" target="_blank">+ 创建图片</a-button>
-        <a-button type="primary" href="/add_picture/batch" target="_blank" ghost>+ 批量创建图片</a-button>
+        <a-button type="primary" href="/add_picture/batch" target="_blank" ghost
+          >+ 批量创建图片</a-button
+        >
       </a-space>
     </a-flex>
-    <div style="margin-bottom: 16px;"></div>
+    <div style="margin-bottom: 16px"></div>
     <!-- 条件查询 -->
     <a-form layout="inline" :model="searchParams" @finish="doSearch" @submit.prevent="doSearch">
       <a-form-item label="id">
@@ -20,18 +22,38 @@
         <a-input v-model:value="searchParams.name" placeholder="输入图片名称" allow-clear />
       </a-form-item>
       <a-form-item label="图片分类">
-        <a-input v-model:value="searchParams.category" placeholder="输入图片分类" allow-clear />
+        <a-select
+          v-model:value="searchParams.category"
+          placeholder="请输入图片分类"
+          mode="category"
+          allow-clear
+          :options="categoryOptions"
+        />
       </a-form-item>
       <a-form-item label="图片标签">
-        <a-select v-model:value="searchParams.tags" mode="tags" placeholder="输入图片标签" allow-clear
-          style="min-width: 180px;" />
+        <a-select
+          v-model:value="searchParams.tags"
+          placeholder="请输入图片标签"
+          mode="tags"
+          allow-clear
+          :options="tagOptions"
+          style="min-width: 180px"
+        />
       </a-form-item>
       <a-form-item label="简介搜索">
-        <a-input v-model:value="searchParams.introduction" placeholder="输入名称或者简介" allow-clear />
+        <a-input
+          v-model:value="searchParams.introduction"
+          placeholder="输入名称或者简介"
+          allow-clear
+        />
       </a-form-item>
       <a-form-item name="reviewStatus" label="审核状态">
-        <a-select v-model:value="searchParams.reviewStatus" placeholder="请选择审核状态" allow-clear
-          :options="PIC_REVIEW_STATUS_OPTIONS" />
+        <a-select
+          v-model:value="searchParams.reviewStatus"
+          placeholder="请选择审核状态"
+          allow-clear
+          :options="PIC_REVIEW_STATUS_OPTIONS"
+        />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit" @click="doSearch">搜索</a-button>
@@ -39,8 +61,13 @@
     </a-form>
 
     <!-- 用户列表表格：使用 AntD Table 原生分页与排序 -->
-    <a-table :columns="columns" :data-source="dataList" :pagination="tablePagination" :row-key="'id'"
-      @change="handleTableChange">
+    <a-table
+      :columns="columns"
+      :data-source="dataList"
+      :pagination="tablePagination"
+      :row-key="'id'"
+      @change="handleTableChange"
+    >
       <template #headerCell="{ column }">
         <template v-if="column.key === 'name'">
           <span>
@@ -83,21 +110,42 @@
           {{ dayjs(record.editTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template v-else-if="column.key === 'action'">
-          <a-button type="link" :href="`/add_picture?id=${record.id}`" target="_blank">编辑</a-button>
-          <a-popconfirm title="确定删除吗？" ok-test="确定" cancel-text="取消" danger @confirm="doDelete(record.id)"
-            @cancel="cancel">
+          <a-button type="link" :href="`/add_picture?id=${record.id}`" target="_blank"
+            >编辑</a-button
+          >
+          <a-popconfirm
+            title="确定删除吗？"
+            ok-test="确定"
+            cancel-text="取消"
+            danger
+            @confirm="doDelete(record.id)"
+            @cancel="cancel"
+          >
             <span class="delete-action">删除</span>
           </a-popconfirm>
-          <a-button v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.PASS" type="link"
-            @click="handleReview(record, PIC_REVIEW_STATUS_ENUM.PASS)">通过</a-button>
-          <a-button v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.REJECT" type="link"
-            @click="openReviewModal(record)" danger>
+          <a-button
+            v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.PASS"
+            type="link"
+            @click="handleReview(record, PIC_REVIEW_STATUS_ENUM.PASS)"
+            >通过</a-button
+          >
+          <a-button
+            v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.REJECT"
+            type="link"
+            @click="openReviewModal(record)"
+            danger
+          >
             拒绝
           </a-button>
         </template>
       </template>
     </a-table>
-    <a-modal v-model:open="open" title="拒绝原因" @ok="handleReviewOK(PIC_REVIEW_STATUS_ENUM.REJECT)" @cancel="cancel">
+    <a-modal
+      v-model:open="open"
+      title="拒绝原因"
+      @ok="handleReviewOK(PIC_REVIEW_STATUS_ENUM.REJECT)"
+      @cancel="cancel"
+    >
       <a-form-item label="拒绝原因">
         <a-input v-model:value="reviewMessage" placeholder="输入拒绝原因" allow-clear />
       </a-form-item>
@@ -106,13 +154,22 @@
 </template>
 <script lang="ts" setup>
 // 接口：图片分页查询（由 openapi 生成）
-import { doPictureReview, listPictureByPage, listPictureVoByPage } from '@/api/pictureController';
-import { SmileOutlined } from '@ant-design/icons-vue';
-import { message, type TableProps } from 'ant-design-vue';
-import { computed, onMounted, reactive, ref } from 'vue';
-import dayjs from 'dayjs';
-import { deletePicture } from '@/api/pictureController';
-import { PIC_REVIEW_STATUS_ENUM, PIC_REVIEW_STATUS_MAP, PIC_REVIEW_STATUS_OPTIONS } from '@/constants/picture';
+import {
+  doPictureReview,
+  listPictureByPage,
+  listPictureTagCategory,
+  listPictureVoByPage,
+} from '@/api/pictureController'
+import { SmileOutlined } from '@ant-design/icons-vue'
+import { message, type TableProps } from 'ant-design-vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import dayjs from 'dayjs'
+import { deletePicture } from '@/api/pictureController'
+import {
+  PIC_REVIEW_STATUS_ENUM,
+  PIC_REVIEW_STATUS_MAP,
+  PIC_REVIEW_STATUS_OPTIONS,
+} from '@/constants/picture'
 // 说明：移除 vue-request 依赖，改用 AntD Table 原生分页与 onChange 事件处理，避免未安装依赖导致的报错
 // 基础列定义
 const open = ref<boolean>(false)
@@ -174,7 +231,7 @@ const baseColumns = [
   },
   {
     title: '审核信息',
-    dataIndex: 'reviewMessage'
+    dataIndex: 'reviewMessage',
   },
   {
     title: '创建时间',
@@ -193,14 +250,46 @@ const baseColumns = [
     key: 'action',
   },
 ]
-
+const categoryOptions = ref<string[]>([])
+const tagOptions = ref<string[]>([])
+/**
+ * 获取分类和标签
+ *
+ */
+const getCategoryAndTag = async () => {
+  const res = await listPictureTagCategory()
+  if (res.data.code === 0 && res.data.data) {
+    categoryOptions.value = (res.data.data.categoryList ?? []).map((data: string) => {
+      return {
+        label: data,
+        value: data,
+      }
+    })
+    tagOptions.value = (res.data.data.tagList ?? []).map((data: string) => {
+      return {
+        label: data,
+        value: data,
+      }
+    })
+  } else {
+    message.error('获取分类和标签失败' + res.data.message)
+  }
+}
+onMounted(() => {
+  getCategoryAndTag()
+})
 // 动态计算列，同步排序状态
 const columns = computed(() => {
   return baseColumns.map((col) => {
     if (col.sorter && col.key === searchParams.sortField) {
       return {
         ...col,
-        sortOrder: searchParams.sortOrder === 'asc' ? 'ascend' : searchParams.sortOrder === 'desc' ? 'descend' : null,
+        sortOrder:
+          searchParams.sortOrder === 'asc'
+            ? 'ascend'
+            : searchParams.sortOrder === 'desc'
+              ? 'descend'
+              : null,
       }
     }
     return {
@@ -256,13 +345,13 @@ const fetchData = async () => {
   const payload = cleanParams({
     ...searchParams,
     sortField: searchParams.sortField,
-    nullSpaceId: true
+    nullSpaceId: true,
   })
 
   // 强制转换为 PictureQueryRequest，确保满足类型要求
   const payloadTyped: API.PictureQueryRequest = {
     ...payload,
-    id: searchParams.id
+    id: searchParams.id,
   }
   const { data } = await listPictureByPage(payloadTyped)
   if (data && data.code === 0 && data.data) {
@@ -273,8 +362,6 @@ const fetchData = async () => {
   }
 }
 
-
-
 const handleTableChange: TableProps['onChange'] = (pagination, filters, sorter) => {
   // 更新分页
   searchParams.current = pagination.current ?? 1
@@ -283,7 +370,12 @@ const handleTableChange: TableProps['onChange'] = (pagination, filters, sorter) 
   // 抽取排序字段与方向（兼容多种来源）
   const extractField = (s: any): string | undefined => {
     if (!s) return undefined
-    return (s?.field as string) ?? (s?.columnKey as string) ?? (s?.column?.dataIndex as string) ?? undefined
+    return (
+      (s?.field as string) ??
+      (s?.columnKey as string) ??
+      (s?.column?.dataIndex as string) ??
+      undefined
+    )
   }
 
   const normalizeOrder = (order?: 'descend' | 'ascend' | null): 'desc' | 'asc' | undefined => {
@@ -336,7 +428,7 @@ const doDelete = async (id: number) => {
   }
 }
 const cancel = (e: MouseEvent) => {
-  console.log(e);
+  console.log(e)
   message.error('你已取消操作！')
 }
 
@@ -345,7 +437,11 @@ const cancel = (e: MouseEvent) => {
  * @param record
  * @param reviewStatus
  */
-const handleReview = async (record: API.Picture, reviewStatus: number, messageOverride?: string) => {
+const handleReview = async (
+  record: API.Picture,
+  reviewStatus: number,
+  messageOverride?: string,
+) => {
   if (!record.id) {
     message.error('图片 ID 不能为空')
     return
@@ -353,16 +449,16 @@ const handleReview = async (record: API.Picture, reviewStatus: number, messageOv
   // 通过审核时使用默认消息，拒绝时使用已有的审核信息或默认消息
   let reviewMessage: string
   if (reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS) {
-    reviewMessage = "管理员自动过审"
+    reviewMessage = '管理员自动过审'
   } else {
-    reviewMessage = messageOverride ?? record.reviewMessage ?? "管理员操作拒绝"
+    reviewMessage = messageOverride ?? record.reviewMessage ?? '管理员操作拒绝'
   }
 
   try {
     const res = await doPictureReview({
       id: record.id,
       reviewStatus,
-      reviewMessage
+      reviewMessage,
     } as API.PictureUpdataRequest & { reviewStatus: number; reviewMessage: string })
     if (res.data.code === 0) {
       message.success('审核操作成功')
@@ -381,7 +477,7 @@ const handleReviewOK = async (reviewStatus: number) => {
   }
   await handleReview(reviewRecord.value, reviewStatus, reviewMessage.value)
   fetchData()
-  open.value = false;
+  open.value = false
 }
 
 const openReviewModal = (record: API.Picture) => {

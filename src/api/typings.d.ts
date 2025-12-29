@@ -11,6 +11,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListSoImageSearchResult = {
+    code?: number
+    data?: SoImageSearchResult[]
+    message?: string
+  }
+
   type BaseResponseListSpaceLevel = {
     code?: number
     data?: SpaceLevel[]
@@ -333,6 +339,8 @@ declare namespace API {
     spaceId?: number
     /** 空间id是否为空 */
     nullSpaceId?: boolean
+    startEditTime?: string
+    endEditTime?: string
   }
 
   type PictureTagCategory = {
@@ -396,6 +404,18 @@ declare namespace API {
     user?: UserVO
     /** 空间 id */
     spaceId?: number
+  }
+
+  type SearchPictureByPictureRequest = {
+    pictureId?: number
+  }
+
+  type SoImageSearchResult = {
+    imgUrl?: string
+    title?: string
+    imgkey?: string
+    http?: string
+    https?: string
   }
 
   type Space = {
@@ -525,7 +545,7 @@ declare namespace API {
     /** 邀请用户 id */
     inviteUser?: number
     /** 手机号 */
-    phoneNumber?: number
+    phoneNumber?: string
     /** 邮箱 */
     email?: string
     /** 国家代码 */
@@ -552,7 +572,7 @@ declare namespace API {
     /** 会员过期时间 */
     vipExpireTime?: string
     /** 手机号 */
-    phoneNumber?: number
+    phoneNumber?: string
     /** 邮箱 */
     email?: string
     /** 手机国家码 */
@@ -592,7 +612,7 @@ declare namespace API {
     /** 分享码 */
     shareCode?: string
     /** 手机号 */
-    phoneNumber?: number
+    phoneNumber?: string
     /** 会员兑换码 */
     vipCode?: string
     /** 邮箱 */
@@ -613,6 +633,23 @@ declare namespace API {
     checkPassword?: string
   }
 
+  type UserUpdateByThemSelfRequest = {
+    /** 用户id */
+    id: number
+    /** 用户昵称 */
+    userName?: string
+    /** 用户简介 */
+    userProfile?: string
+    /** 邮箱 */
+    email?: string
+  }
+
+  type UserUpdatePasswordRequest = {
+    userOldPassword?: string
+    userNewPassword?: string
+    checkPassword?: string
+  }
+
   type UserUpdateRequest = {
     id?: number
     userName?: string
@@ -625,7 +662,7 @@ declare namespace API {
     /** 用户vip编号 */
     vipNumber?: number
     /** 用户手机号 */
-    phoneNumber?: number
+    phoneNumber?: string
     /** 用户邮箱 */
     email?: string
     /** 用户vip等级 */

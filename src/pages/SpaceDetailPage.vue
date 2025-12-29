@@ -2,27 +2,48 @@
   <div id="spaceDetailPage">
     <a-flex justify="space-between">
       <h2>{{ space.spaceName }}(私有空间)</h2>
+
       <a-sapce size="middle">
-        <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank">+ 创建图片</a-button>
+        <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank"
+          >+ 创建图片</a-button
+        >
         <a-tooltip :title="`${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
-          <a-progress type="circle" :percent="((space.totalSize / space.maxSize) * 100).toFixed(1)" :size="42" />
+          <a-progress
+            type="circle"
+            :percent="((space.totalSize / space.maxSize) * 100).toFixed(1)"
+            :size="42"
+          />
         </a-tooltip>
       </a-sapce>
     </a-flex>
     <div style="margin-bottom: 16px" />
-    <PictureList :dataList="dataList" :loading="loading" :showOp="true" :onReload="fetchData" />
-    <a-pagination v-model:current="searchParams.current" v-model:pageSize="searchParams.pageSize" :total="total"
-      @change="onPageChange" style="text-align: right; display: flex; justify-content: flex-end;" />
+    <!-- 搜索表单 -->
+
+    <PictureSearchFrom :onSearch="onSearch" v-model:searchParams="searchParams" />
+
+    <PictureList
+      :dataList="dataList"
+      :loading="loading"
+      :showOp="true"
+      :onReload="fetchData"
+      style="margin-top: 16px"
+    />
+    <a-pagination
+      v-model:current="searchParams.current"
+      v-model:pageSize="searchParams.pageSize"
+      :total="total"
+      @change="onPageChange"
+      style="text-align: right; display: flex; justify-content: flex-end"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, h, computed, reactive } from 'vue'
+import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
-import { deleteSpace, getSpaceVoById } from '@/api/spaceController'
+import { getSpaceVoById } from '@/api/spaceController'
 import { listPictureVoByPage } from '@/api/pictureController'
 import { formatSize } from '@/utils'
-
 
 interface Props {
   id: number | string
@@ -30,10 +51,6 @@ interface Props {
 
 const space = ref<API.SpaceVO>({})
 const props = defineProps<Props>()
-
-
-
-
 
 const getSpaceDetail = async () => {
   try {
@@ -46,7 +63,6 @@ const getSpaceDetail = async () => {
   } catch (error: unknown) {
     message.error('获取空间详情失败' + (error as Error).message)
   }
-
 }
 //定义数据
 const dataList = ref<API.PictureVO[]>([])
@@ -54,27 +70,25 @@ const total = ref(0)
 const loading = ref(true)
 
 // 搜索条件
-const searchParams = reactive<API.PictureQueryRequest>({
+const searchParams = ref<API.PictureQueryRequest>({
   current: 1,
   pageSize: 12,
   sortField: 'createTime',
   sortOrder: 'descend',
 })
 
-
 const onPageChange = (page: number, pageSize: number) => {
-  searchParams.current = page
-  searchParams.pageSize = pageSize
+  searchParams.value.current = page
+  searchParams.value.pageSize = pageSize
   fetchData()
 }
 // 获取数据
 const fetchData = async () => {
   loading.value = true
   const params = {
-    ...searchParams,
-    spaceId: props.id
+    ...searchParams.value,
+    spaceId: props.id,
   }
-
 
   const res = await listPictureVoByPage(params)
   if (res.data.data) {
@@ -85,7 +99,15 @@ const fetchData = async () => {
   }
   loading.value = false
 }
-
+const onSearch = (params: API.PictureQueryRequest) => {
+  searchParams.value = {
+    ...searchParams.value,
+    ...params,
+    current: 1,
+    pageSize: 12,
+  }
+  fetchData()
+}
 
 // 页面加载时请求一次
 onMounted(async () => {
@@ -94,13 +116,10 @@ onMounted(async () => {
   // 获取数据
   fetchData()
 })
-
-
 </script>
 
 <style scoped>
 #spaceDetailPage {
-
   margin-bottom: 16px;
 }
 </style>

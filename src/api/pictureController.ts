@@ -116,6 +116,21 @@ export async function doPictureReview(
   })
 }
 
+/** 此处后端没有提供注释 POST /picture/search/picture */
+export async function searchPictureByPictureIsSo(
+  body: API.SearchPictureByPictureRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListSoImageSearchResult>('/picture/search/picture', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 获取图片标签与分类枚举 返回前端可用的标签和分类列表 GET /picture/tag_category */
 export async function listPictureTagCategory(options?: { [key: string]: any }) {
   return request<any>('/picture/tag_category', {

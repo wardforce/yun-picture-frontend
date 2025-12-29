@@ -1,6 +1,6 @@
 <template>
   <div class="addPicturePage">
-    <h2 style="margin-bottom: 16px;">{{ id ? '编辑图片' : '创建图片' }}</h2>
+    <h2 style="margin-bottom: 16px">{{ id ? '编辑图片' : '创建图片' }}</h2>
     <a-typography-paragraph v-if="spaceId" type="secondary">
       保存至空间:
       <a :href="`/space/${spaceId}`" target="_blank">
@@ -19,21 +19,41 @@
       </a-tab-pane>
     </a-tabs>
     <!-- 信息表单 -->
-    <a-form name="pictureForm" v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
+    <a-form
+      name="pictureForm"
+      v-if="picture"
+      layout="vertical"
+      :model="pictureForm"
+      @finish="handleSubmit"
+    >
       <a-form-item name="name" label="名称">
         <a-input v-model:value="pictureForm.name" placeholder="请输入图片名称" allow-clear />
       </a-form-item>
       <a-form-item name="introduction" label="简介">
-        <a-textarea v-model:value="pictureForm.introduction" placeholder="请输入图片简介" allow-clear
-          :auto-size="{ minRows: 2, maxRows: 5 }" />
+        <a-textarea
+          v-model:value="pictureForm.introduction"
+          placeholder="请输入图片简介"
+          allow-clear
+          :auto-size="{ minRows: 2, maxRows: 5 }"
+        />
       </a-form-item>
       <a-form-item name="category" label="分类">
-        <a-auto-complete v-model:value="pictureForm.category" placeholder="请输入图片分类" allow-clear
-          :options="categoryOptions" />
+        <a-select
+          v-model:value="pictureForm.category"
+          placeholder="请输入图片分类"
+          mode="category"
+          allow-clear
+          :options="categoryOptions"
+        />
       </a-form-item>
       <a-form-item name="tags" label="标签">
-        <a-select v-model:value="pictureForm.tags" placeholder="请输入图片标签" mode="tags" allow-clear
-          :options="tagOptions" />
+        <a-select
+          v-model:value="pictureForm.tags"
+          placeholder="请输入图片标签"
+          mode="tags"
+          allow-clear
+          :options="tagOptions"
+        />
       </a-form-item>
 
       <a-form-item>
@@ -79,7 +99,7 @@ const handleSubmit = async (values: any) => {
   const res = await editPicture({
     id: pictureId,
     spaceId: spaceId.value,
-    ...values
+    ...values,
   })
   //操作成功
   if (res.data.code === 0 && res.data.data) {

@@ -125,3 +125,33 @@ export async function updateUser(body: API.UserUpdateRequest, options?: { [key: 
     ...(options || {}),
   })
 }
+
+/** 用户编辑自己的信息 管理员更新用户 POST /user/update/themself */
+export async function updateUserByThemself(
+  body: API.UserUpdateByThemSelfRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/user/update/themself', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 用户修改自己的密码 用户通过旧密码修改新密码 POST /user/update/themself/password */
+export async function updateUserPassword(
+  body: API.UserUpdatePasswordRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/user/update/themself/password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
