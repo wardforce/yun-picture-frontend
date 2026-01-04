@@ -2,49 +2,42 @@
   <div id="spaceDetailPage">
     <a-flex justify="space-between">
       <h2>{{ space.spaceName }}(私有空间)</h2>
-
       <a-sapce size="middle">
-        <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank"
-          >+ 创建图片</a-button
-        >
-        <a-tooltip :title="`${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
-          <a-progress
-            type="circle"
-            :percent="((space.totalSize / space.maxSize) * 100).toFixed(1)"
-            :size="42"
-          />
-        </a-tooltip>
+        <a-space>
+          <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank">+ 创建图片</a-button>
+          <a-button :icon="h(EditOutlined)" @click="doBatchEdit">批量编辑</a-button>
+          <a-tooltip :title="`${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
+            <a-progress type="circle" :percent="((space.totalSize / space.maxSize) * 100).toFixed(1)" :size="42" />
+          </a-tooltip>
+        </a-space>
       </a-sapce>
     </a-flex>
     <div style="margin-bottom: 16px" />
     <!-- 搜索表单 -->
-
     <PictureSearchFrom :onSearch="onSearch" v-model:searchParams="searchParams" />
-
-    <PictureList
-      :dataList="dataList"
-      :loading="loading"
-      :showOp="true"
-      :onReload="fetchData"
-      style="margin-top: 16px"
-    />
-    <a-pagination
-      v-model:current="searchParams.current"
-      v-model:pageSize="searchParams.pageSize"
-      :total="total"
-      @change="onPageChange"
-      style="text-align: right; display: flex; justify-content: flex-end"
-    />
+    <div style="margin-bottom: 16px" />
+    <a-form-item label="按照颜色搜索">
+      <color-picker format="hex" @pureColorChange="onColorChange" v-model:pureColor="pureColor"
+        v-model:gradientColor="gradientColor" />
+    </a-form-item>
+    <PictureList :dataList="dataList" :loading="loading" :showOp="true" :onReload="fetchData"
+      style="margin-top: 16px" />
+    <a-pagination v-model:current="searchParams.current" v-model:pageSize="searchParams.pageSize" :total="total"
+      @change="onPageChange" style="text-align: right; display: flex; justify-content: flex-end" />
   </div>
+  <BatchEditPictureModel ref="batchEditPictureModelRef" :spaceId="props.id" :pictureList="dataList"
+    :onSuccess="onBatchEditPictureSuccess" />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, h } from 'vue'
 import { message } from 'ant-design-vue'
 import { getSpaceVoById } from '@/api/spaceController'
-import { listPictureVoByPage } from '@/api/pictureController'
+import { listPictureVoByPage, searchPictureByColor } from '@/api/pictureController'
 import { formatSize } from '@/utils'
-
+import { ColorPicker } from 'vue3-colorpicker'
+import 'vue3-colorpicker/style.css'
+import { EditOutlined } from '@ant-design/icons-vue'
 interface Props {
   id: number | string
 }
@@ -116,6 +109,32 @@ onMounted(async () => {
   // 获取数据
   fetchData()
 })
+const onColorChange = async (color: string) => {
+  loading.value = true
+  const res = await searchPictureByColor({
+    picColor: color,
+    spaceId: props.id,
+  })
+  if (res.data.code === 0 && res.data.data) {
+    const data = res.data.data
+    dataList.value = data
+    total.value = data.length
+  } else {
+    message.error('获取数据失败，' + res.data.message)
+  }
+  loading.value = false
+}
+//批量编辑图片
+const onBatchEditPictureSuccess = () => {
+  fetchData()
+}
+const batchEditPictureModelRef = ref()
+//打开编辑弹窗
+const doBatchEdit = () => {
+  if (batchEditPictureModelRef.value) {
+    batchEditPictureModelRef.value.openModal()
+  }
+}
 </script>
 
 <style scoped>

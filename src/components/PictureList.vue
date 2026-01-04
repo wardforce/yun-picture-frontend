@@ -24,28 +24,23 @@
               </template>
             </a-card-meta>
             <template #actions v-if="showOp">
-              <a-space @click="(e) => doSearch(picture, e)">
-                <SearchOutlined />
-                搜索
-              </a-space>
-              <a-space @click="(e) => doEdit(picture, e)">
-                <edit-outlined />编辑
-              </a-space>
-              <a-space @click="(e) => doDelete(picture, e)">
-                <delete-outlined />删除
-              </a-space>
+              <ShareAltOutlined @click="(e) => doShare(picture, e)" />
+              <SearchOutlined @click="(e) => doSearch(picture, e)" />
+              <edit-outlined @click="(e) => doEdit(picture, e)" />
+              <delete-outlined @click="(e) => doDelete(picture, e)" />
             </template>
           </a-card>
         </a-list-item>
       </template>
     </a-list>
+    <ShareModel ref="shareModelRef" :link="shareLink" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, DeleteOutlined, SearchOutlined, ShareAltOutlined } from '@ant-design/icons-vue'
 import { message } from 'ant-design-vue'
 import { deletePicture } from '@/api/pictureController'
 
@@ -116,6 +111,22 @@ const doSearch = (picture, e) => {
   }
   window.open(`/search_picture?pictureId=${picture.id}`)
 }
+const shareModelRef = ref()
+const shareLink = ref<string>()
+const doShare = (picture, e) => {
+  // 阻止冒泡
+  e.stopPropagation()
+  if (!picture.id) {
+    message.error('图片 ID 不存在')
+    return
+  }
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModelRef.value) {
+    shareModelRef.value.openModal()
+  }
+}
+
+
 </script>
 
 <style scoped>

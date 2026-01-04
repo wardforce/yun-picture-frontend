@@ -3,13 +3,7 @@
     <a-flex justify="space-between">
       <div style="margin-bottom: 16px"></div>
       <!-- 条件查询 -->
-      <a-form
-        name="searchForm"
-        layout="inline"
-        :model="searchParams"
-        @finish="doSearch"
-        @submit.prevent="doSearch"
-      >
+      <a-form name="searchForm" layout="inline" :model="searchParams" @finish="doSearch" @submit.prevent="doSearch">
         <a-form-item label="关键词" name="searchText">
           <a-input v-model:value="searchParams.searchText" placeholder="关键词输入框" allow-clear />
         </a-form-item>
@@ -17,41 +11,20 @@
           <a-input v-model:value="searchParams.name" placeholder="输入图片名称" allow-clear />
         </a-form-item>
         <a-form-item name="introduction" label="简介">
-          <a-textarea
-            v-model:value="searchParams.introduction"
-            placeholder="请输入图片简介"
-            allow-clear
-            :auto-size="{ minRows: 2, maxRows: 5 }"
-          />
+          <a-textarea v-model:value="searchParams.introduction" placeholder="请输入图片简介" allow-clear
+            :auto-size="{ minRows: 2, maxRows: 5 }" />
         </a-form-item>
         <a-form-item name="category" label="分类">
-          <a-select
-            v-model:value="searchParams.category"
-            placeholder="请输入图片分类"
-            allow-clear
-            :options="categoryOptions"
-          />
+          <a-select v-model:value="searchParams.category" placeholder="请输入图片分类" allow-clear
+            :options="categoryOptions" />
         </a-form-item>
         <a-form-item name="tags" label="标签">
-          <a-select
-            v-model:value="searchParams.tags"
-            placeholder="请输入图片标签"
-            mode="tags"
-            allow-clear
-            :options="tagOptions"
-            style="min-width: 180px"
-          />
+          <a-select v-model:value="searchParams.tags" placeholder="请输入图片标签" mode="tags" allow-clear
+            :options="tagOptions" style="min-width: 180px" />
         </a-form-item>
         <a-form-item label="日期" name="dateRange">
-          <a-range-picker
-            style="width: 400px"
-            show-time
-            format="YYYY/MM/DD HH:mm:ss"
-            v-model:value="dateRange"
-            :placeholder="['编辑开始时间', '编辑结束时间']"
-            :presets="rangePresets"
-            @change="onRangeChange"
-          />
+          <a-range-picker style="width: 400px" show-time format="YYYY/MM/DD HH:mm:ss" v-model:value="dateRange"
+            :placeholder="['编辑开始时间', '编辑结束时间']" :presets="rangePresets" @change="onRangeChange" />
         </a-form-item>
         <a-form-item label="格式">
           <a-input v-model:value="searchParams.picFormat" placeholder="输入图片格式" allow-clear />
@@ -68,6 +41,7 @@
             <a-button html-type="reset" @click="doClear">重置</a-button>
           </a-space>
         </a-form-item>
+
       </a-form>
     </a-flex>
   </div>
@@ -167,6 +141,7 @@ const doClear = () => {
   //清空后重新搜索
   props.onSearch?.(searchParams)
 }
+
 </script>
 
 <style scoped>
@@ -174,6 +149,7 @@ const doClear = () => {
   color: #ff4d4f;
   cursor: pointer;
 }
+
 .picture-search-from .ant-form-item {
   margin-top: 16px;
 }

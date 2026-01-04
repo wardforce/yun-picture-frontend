@@ -5,9 +5,27 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseCreateOutPaintingTaskResponse = {
+    code?: number
+    data?: CreateOutPaintingTaskResponse
+    message?: string
+  }
+
+  type BaseResponseGetOutPaintingTaskResponse = {
+    code?: number
+    data?: GetOutPaintingTaskResponse
+    message?: string
+  }
+
   type BaseResponseInteger = {
     code?: number
     data?: number
+    message?: string
+  }
+
+  type BaseResponseListPictureVO = {
+    code?: number
+    data?: PictureVO[]
     message?: string
   }
 
@@ -113,8 +131,29 @@ declare namespace API {
     message?: string
   }
 
+  type CreateOutPaintingTaskResponse = {
+    output?: Output
+    code?: string
+    message?: string
+    requestId?: string
+  }
+
+  type CreatePictureOutPaintingTaskRequest = {
+    pictureId?: number
+    parameters?: Parameters
+  }
+
   type DeleteRequest = {
     id?: number
+  }
+
+  type getOutPaintingTaskParams = {
+    taskId: string
+  }
+
+  type GetOutPaintingTaskResponse = {
+    requestId?: string
+    output?: Output
   }
 
   type getPictureByIdParams = {
@@ -171,6 +210,12 @@ declare namespace API {
   type OrderItem = {
     column?: string
     asc?: boolean
+  }
+
+  type Output = {
+    [x: string]: string
+    taskId?: string
+    taskStatus?: string
   }
 
   type PagePicture = {
@@ -243,6 +288,22 @@ declare namespace API {
     pages?: number
   }
 
+  type Parameters = {
+    angle?: number
+    outputRatio?: string
+    topOffset?: number
+    bottomOffset?: number
+    leftOffset?: number
+    rightOffset?: number
+    bestQuality?: boolean
+    limitImageSize?: boolean
+    addWatermark?: boolean
+    xscale?: number
+    yscale?: number
+    xScale?: number
+    yScale?: number
+  }
+
   type Picture = {
     /** 图片 id */
     id?: number
@@ -288,6 +349,17 @@ declare namespace API {
     reviewTime?: string
     /** 空间 id */
     spaceId?: number
+    /** 图片主色调 */
+    picColor?: string
+  }
+
+  type PictureEditByBatchRequest = {
+    pictureIdList?: number[]
+    spaceId?: number
+    category?: string
+    tags?: string[]
+    /** 图片命名规则，支持变量：{index}、{category}、{tags}、{time}、{random}，例如：{index}_{category}_{tags}_{time}_{random} */
+    nameRule?: string
   }
 
   type PictureEditRequest = {
@@ -301,6 +373,8 @@ declare namespace API {
     category?: string
     /** 图片标签列表 */
     tags?: string[]
+    /** 图片主色调 */
+    picColor?: string
   }
 
   type PictureQueryRequest = {
@@ -341,6 +415,8 @@ declare namespace API {
     nullSpaceId?: boolean
     startEditTime?: string
     endEditTime?: string
+    /** 图片主色调 */
+    picColor?: string
   }
 
   type PictureTagCategory = {
@@ -361,6 +437,8 @@ declare namespace API {
     category?: string
     /** 图片标签列表 */
     tags?: string[]
+    /** 图片主色调 */
+    picColor?: string
   }
 
   type PictureUploadByBatchRequest = {
@@ -403,6 +481,12 @@ declare namespace API {
     updateTime?: string
     user?: UserVO
     /** 空间 id */
+    spaceId?: number
+    picColor?: string
+  }
+
+  type SearchPictureByColorRequest = {
+    picColor?: string
     spaceId?: number
   }
 

@@ -26,6 +26,21 @@ export async function editPicture(body: API.PictureEditRequest, options?: { [key
   })
 }
 
+/** 批量编辑图片 批量编辑图片 POST /picture/edit/batch */
+export async function editPictureByBatch(
+  body: API.PictureEditByBatchRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean>('/picture/edit/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 根据 id 获取图片（仅管理员） GET /picture/get */
 export async function getPictureById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -101,6 +116,39 @@ export async function listPictureVoByPageCache(
   })
 }
 
+/** 扩图 扩图 POST /picture/out_painting/create_task */
+export async function createOutPaintingTask(
+  body: API.CreatePictureOutPaintingTaskRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseCreateOutPaintingTaskResponse>(
+    '/picture/out_painting/create_task',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: body,
+      ...(options || {}),
+    }
+  )
+}
+
+/** 此处后端没有提供注释 GET /picture/out_painting/get_task */
+export async function getOutPaintingTask(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getOutPaintingTaskParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseGetOutPaintingTaskResponse>('/picture/out_painting/get_task', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}
+
 /** 审核图片 审核图片 POST /picture/review */
 export async function doPictureReview(
   body: API.PictureUpdataRequest,
@@ -116,7 +164,22 @@ export async function doPictureReview(
   })
 }
 
-/** 此处后端没有提供注释 POST /picture/search/picture */
+/** 根据颜色搜索图片 根据颜色搜索图片 POST /picture/search/color */
+export async function searchPictureByColor(
+  body: API.SearchPictureByColorRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListPictureVO>('/picture/search/color', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 以图搜图 以图搜图 POST /picture/search/picture */
 export async function searchPictureByPictureIsSo(
   body: API.SearchPictureByPictureRequest,
   options?: { [key: string]: any }

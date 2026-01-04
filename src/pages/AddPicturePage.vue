@@ -1,5 +1,6 @@
 <template>
   <div class="addPicturePage">
+
     <h2 style="margin-bottom: 16px">{{ id ? '编辑图片' : '创建图片' }}</h2>
     <a-typography-paragraph v-if="spaceId" type="secondary">
       保存至空间:
@@ -7,6 +8,7 @@
         {{ spaceId }}
       </a>
     </a-typography-paragraph>
+
     <!-- 选择上传方式 -->
     <a-tabs v-model:activeKey="uploadType">
       <a-tab-pane key="file" tab="上传本地文件">
@@ -18,58 +20,57 @@
         <UrlPictureUpload :picture="picture" :on-upload-success="onSuccess" :spaceId="spaceId" />
       </a-tab-pane>
     </a-tabs>
+    <!-- 图片编辑 -->
+    <div v-if="picture?.url" class="edit-bar">
+      <a-flex justify="center" gap="16">
+        <a-button :icon="h(EditOutlined)" @click="doEditPicture">
+          编辑图片
+        </a-button>
+        <a-button :icon="h(FullscreenOutlined)" type="primary" @click="doOutPainting">
+          AI扩图
+        </a-button>
+      </a-flex>
+    </div>
+    <ImageCropper ref="imageCropperRef" :imageUrl="picture?.url" :spaceId="spaceId" :picture="picture"
+      :onSuccess="onCropSuccess" />
+    <ImageOutPainting v-if="picture?.url" ref="imageOutPaintingRef" :picture="picture" :spaceId="spaceId"
+      :onSuccess="onOutPaintingSuccess" />
     <!-- 信息表单 -->
-    <a-form
-      name="pictureForm"
-      v-if="picture"
-      layout="vertical"
-      :model="pictureForm"
-      @finish="handleSubmit"
-    >
+    <a-form name="pictureForm" v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
       <a-form-item name="name" label="名称">
         <a-input v-model:value="pictureForm.name" placeholder="请输入图片名称" allow-clear />
       </a-form-item>
       <a-form-item name="introduction" label="简介">
-        <a-textarea
-          v-model:value="pictureForm.introduction"
-          placeholder="请输入图片简介"
-          allow-clear
-          :auto-size="{ minRows: 2, maxRows: 5 }"
-        />
+        <a-textarea v-model:value="pictureForm.introduction" placeholder="请输入图片简介" allow-clear
+          :auto-size="{ minRows: 2, maxRows: 5 }" />
       </a-form-item>
       <a-form-item name="category" label="分类">
-        <a-select
-          v-model:value="pictureForm.category"
-          placeholder="请输入图片分类"
-          mode="category"
-          allow-clear
-          :options="categoryOptions"
-        />
+        <a-select v-model:value="pictureForm.category" placeholder="请输入图片分类" mode="category" allow-clear
+          :options="categoryOptions" />
       </a-form-item>
       <a-form-item name="tags" label="标签">
-        <a-select
-          v-model:value="pictureForm.tags"
-          placeholder="请输入图片标签"
-          mode="tags"
-          allow-clear
-          :options="tagOptions"
-        />
+        <a-select v-model:value="pictureForm.tags" placeholder="请输入图片标签" mode="tags" allow-clear
+          :options="tagOptions" />
       </a-form-item>
 
       <a-form-item>
         <a-button type="primary" html-type="submit" style="width: 100%">提交</a-button>
       </a-form-item>
     </a-form>
+
   </div>
 </template>
 
 <script setup lang="ts">
+import { EditOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
 import { editPicture, getPictureVoById, listPictureTagCategory } from '@/api/pictureController'
 import PictureUpload from '@/components/PictureUpload.vue'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
 import { message } from 'ant-design-vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, h, onMounted, ref } from 'vue'
+
 import { useRoute, useRouter } from 'vue-router'
+import ImageCropper from '@/components/ImageCropper.vue'
 const picture = ref<API.PictureVO>()
 const uploadType = ref<'file' | 'url'>('file')
 const route = useRoute()
@@ -159,11 +160,37 @@ const getPicture = async () => {
 onMounted(() => {
   getPicture()
 })
+//图片编辑
+const imageCropperRef = ref()
+//打开弹窗
+const doEditPicture = () => {
+  imageCropperRef.value.openModal()
+}
+//成功后的回调
+const onCropSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
+
+//AI扩图
+const imageOutPaintingRef = ref()
+//打开弹窗
+const doOutPainting = () => {
+  imageOutPaintingRef.value.openModal()
+}
+//成功后的回调
+const onOutPaintingSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
 </script>
 
 <style scoped>
 .addPicturePage {
   max-width: 720px;
   margin: 0 auto;
+}
+
+.addPicturePage .edit-bar {
+  text-align: center;
+  margin: 16px 0px;
 }
 </style>

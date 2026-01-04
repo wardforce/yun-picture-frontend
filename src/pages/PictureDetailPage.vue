@@ -47,9 +47,18 @@
             <a-descriptions-item label="大小">
               {{ formatSize(picture.picSize) }}
             </a-descriptions-item>
+            <a-descriptions-item label="颜色">
+              <a-space>
+                {{ picture.picColor ?? '-' }}
+                <div :style="{ width: '16px', height: '16px', backgroundColor: toHexColor(picture.picColor) }"></div>
+              </a-space>
+            </a-descriptions-item>
           </a-descriptions>
           <!-- 图片操作 -->
           <a-space wrap>
+            <a-button :icon="h(ShareAltOutlined)" type="primary" ghost @click="doShare">
+              分享
+            </a-button>
             <a-button :icon="h(DownloadOutlined)" type="primary" @click="doDownload">
               免费下载
             </a-button>
@@ -63,6 +72,7 @@
         </a-card>
       </a-col>
     </a-row>
+    <ShareModel ref="shareModelRef" :link="shareLink" />
   </div>
 </template>
 
@@ -70,8 +80,8 @@
 import { ref, onMounted, h, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import { deletePicture, getPictureVoById } from '@/api/pictureController'
-import { formatSize } from '@/utils'
-import { EditOutlined, DeleteOutlined, DownloadOutlined } from '@ant-design/icons-vue'
+import { formatSize, toHexColor } from '@/utils'
+import { EditOutlined, DeleteOutlined, DownloadOutlined, ShareAltOutlined } from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { useRouter } from 'vue-router'
 import { downloadImage } from '@/utils'
@@ -154,6 +164,19 @@ onMounted(async () => {
   // 获取数据
   getPictureDetail()
 })
+const shareModelRef = ref()
+const shareLink = ref<string>()
+const doShare = () => {
+
+  if (!picture.value.id) {
+    message.error('图片 ID 不存在')
+    return
+  }
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.value.id}`
+  if (shareModelRef.value) {
+    shareModelRef.value.openModal()
+  }
+}
 
 
 </script>
