@@ -64,7 +64,7 @@
           </div>
 
           <!-- 文字内容 -->
-          <div v-if="msg.content" class="message-text">{{ msg.content }}</div>
+          <div v-if="msg.content" class="message-text" v-html="renderMarkdown(msg.content)"></div>
 
           <!-- 时间戳 -->
           <div class="message-time">{{ formatTime(msg.createTime) }}</div>
@@ -106,6 +106,7 @@
 import { ref, computed, nextTick, watch } from 'vue'
 import { useAiChatStore, type ChatMessageVM } from '@/stores/useAiChatStore'
 import { UserOutlined, RobotOutlined } from '@ant-design/icons-vue'
+import { renderMarkdown } from '@/utils/markdown'
 import dayjs from 'dayjs'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 const loginUserStore = useLoginUserStore()
@@ -295,6 +296,62 @@ watch(
 .message-text {
   word-break: break-word;
   line-height: 1.6;
+}
+
+/* Markdown 渲染样式 */
+.message-text :deep(p) {
+  margin: 0 0 8px 0;
+}
+.message-text :deep(p:last-child) {
+  margin-bottom: 0;
+}
+.message-text :deep(code) {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Consolas', monospace;
+  font-size: 0.9em;
+}
+.message-text :deep(pre) {
+  background: #f6f8fa;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+.message-text :deep(pre code) {
+  background: none;
+  padding: 0;
+}
+.message-text :deep(ul),
+.message-text :deep(ol) {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+.message-text :deep(blockquote) {
+  border-left: 3px solid #ddd;
+  margin: 8px 0;
+  padding-left: 12px;
+  color: #666;
+}
+.message-text :deep(a) {
+  color: #1890ff;
+}
+
+/* 用户消息中的样式覆盖 */
+.message-user .message-text :deep(code) {
+  background: rgba(255, 255, 255, 0.2);
+}
+.message-user .message-text :deep(pre) {
+  background: rgba(255, 255, 255, 0.15);
+}
+.message-user .message-text :deep(a) {
+  color: #fff;
+  text-decoration: underline;
+}
+.message-user .message-text :deep(blockquote) {
+  border-left-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .message-time {
