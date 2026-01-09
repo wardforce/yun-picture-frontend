@@ -1,4 +1,16 @@
 declare namespace API {
+  type AiGenerateResponse = {
+    chatHistory?: ChatHistory
+    pictureVOs?: PictureVO[]
+    aiText?: string
+  }
+
+  type BaseResponseAiGenerateResponse = {
+    code?: number
+    data?: AiGenerateResponse
+    message?: string
+  }
+
   type BaseResponseBoolean = {
     code?: number
     data?: boolean
@@ -14,6 +26,12 @@ declare namespace API {
   type BaseResponseGetOutPaintingTaskResponse = {
     code?: number
     data?: GetOutPaintingTaskResponse
+    message?: string
+  }
+
+  type BaseResponseImageResponse = {
+    code?: number
+    data?: ImageResponse
     message?: string
   }
 
@@ -50,6 +68,18 @@ declare namespace API {
   type BaseResponseLong = {
     code?: number
     data?: number
+    message?: string
+  }
+
+  type BaseResponsePageChatHistoryDetailVO = {
+    code?: number
+    data?: PageChatHistoryDetailVO
+    message?: string
+  }
+
+  type BaseResponsePageChatHistorySessionVO = {
+    code?: number
+    data?: PageChatHistorySessionVO
     message?: string
   }
 
@@ -131,6 +161,103 @@ declare namespace API {
     message?: string
   }
 
+  type ChatHistory = {
+    id?: number
+    message?: string
+    messageType?: string
+    pictureId?: number
+    userId?: number
+    createTime?: string
+    updateTime?: string
+    /** 是否删除(0-未删除, 1-已删除) */
+    isDelete?: number
+    sessionId?: number
+    /** 空间 id */
+    spaceId?: number
+  }
+
+  type ChatHistoryDetailQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    /** 会话ID，必填参数 */
+    sessionId: number
+    /** 消息类型过滤，可选值：user、ai */
+    messageType?: string
+    /** 查询时间段开始 */
+    startTime?: string
+    /** 查询时间段结束 */
+    endTime?: string
+  }
+
+  type ChatHistoryDetailVO = {
+    /** 聊天记录ID */
+    id?: number
+    /** 消息内容 */
+    message?: string
+    /** 消息类型：user/ai */
+    messageType?: string
+    /** 主图片ID */
+    pictureId?: number
+    /** 用户ID */
+    userId?: number
+    /** 会话ID */
+    sessionId?: number
+    /** 创建时间 */
+    createTime?: string
+    /** 空间 id */
+    spaceId?: number
+    /** 关联的图片列表 */
+    pictures?: ChatHistoryPictureVO[]
+  }
+
+  type ChatHistoryPictureVO = {
+    picture?: PictureVO
+    /** 图片类型：INPUT/OUTPUT */
+    pictureType?: string
+    /** 显示顺序 */
+    sortOrder?: number
+  }
+
+  type ChatHistorySessionQueryRequest = {
+    current?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    /** 会话ID，用于精确查询 */
+    sessionId?: number
+    /** 用户ID，仅管理员查询时可用 */
+    userId?: number
+    /** 空间 id */
+    spaceId?: number
+    /** 查询时间段开始 */
+    startTime?: string
+    /** 查询时间段结束 */
+    endTime?: string
+  }
+
+  type ChatHistorySessionVO = {
+    /** 会话ID */
+    sessionId?: number
+    /** 最早聊天时间 */
+    firstChatTime?: string
+    /** 第一条用户消息（prompt） */
+    firstPrompt?: string
+    /** 用户ID，仅管理员接口返回 */
+    userId?: number
+    /** 空间 id */
+    spaceId?: number
+  }
+
+  type CreateChatRequest = {
+    prompt?: string
+    pictureIds?: number[]
+    sessionId?: number
+    /** 空间 id,可选 */
+    spaceId?: number
+  }
+
   type CreateOutPaintingTaskResponse = {
     output?: Output
     code?: string
@@ -143,8 +270,17 @@ declare namespace API {
     parameters?: Parameters
   }
 
+  type DeleteBySessionRequest = {
+    /** 要删除的会话ID */
+    sessionId: number
+  }
+
   type DeleteRequest = {
     id?: number
+  }
+
+  type generatePictureParams = {
+    prompt: string
   }
 
   type getOutPaintingTaskParams = {
@@ -186,6 +322,12 @@ declare namespace API {
     id: number
   }
 
+  type ImageResponse = {
+    text?: string
+    generatePicture?: PictureVO
+    uploadPicture?: PictureVO
+  }
+
   type LoginUserVO = {
     id?: number
     userAccount?: string
@@ -213,9 +355,36 @@ declare namespace API {
   }
 
   type Output = {
-    [x: string]: string
     taskId?: string
     taskStatus?: string
+  }
+
+  type PageChatHistoryDetailVO = {
+    records?: ChatHistoryDetailVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageChatHistoryDetailVO
+    searchCount?: PageChatHistoryDetailVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
+  }
+
+  type PageChatHistorySessionVO = {
+    records?: ChatHistorySessionVO[]
+    total?: number
+    size?: number
+    current?: number
+    orders?: OrderItem[]
+    optimizeCountSql?: PageChatHistorySessionVO
+    searchCount?: PageChatHistorySessionVO
+    optimizeJoinOfCountSql?: boolean
+    maxLimit?: number
+    countId?: string
+    pages?: number
   }
 
   type PagePicture = {

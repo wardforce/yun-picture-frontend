@@ -65,6 +65,9 @@
             <a-button v-if="canEdit" :icon="h(EditOutlined)" type="default" @click="doEdit">
               编辑
             </a-button>
+            <a-button :icon="h(RobotOutlined)" type="primary" ghost @click="doAiEdit">
+              AI编辑
+            </a-button>
             <a-button v-if="canEdit" :icon="h(DeleteOutlined)" danger @click="doDelete">
               删除
             </a-button>
@@ -81,7 +84,7 @@ import { ref, onMounted, h, computed } from 'vue'
 import { message } from 'ant-design-vue'
 import { deletePicture, getPictureVoById } from '@/api/pictureController'
 import { formatSize, toHexColor } from '@/utils'
-import { EditOutlined, DeleteOutlined, DownloadOutlined, ShareAltOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, DeleteOutlined, DownloadOutlined, ShareAltOutlined, RobotOutlined } from '@ant-design/icons-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { useRouter } from 'vue-router'
 import { downloadImage } from '@/utils'
@@ -137,6 +140,25 @@ const doEdit = () => {
       id: String(picture.value.id),
       spaceId: picture.value.spaceId
     }
+  })
+}
+
+// AI编辑图片
+const doAiEdit = () => {
+  if (!picture.value.id) {
+    message.error('图片 ID 不存在')
+    return
+  }
+  const query: Record<string, any> = {
+    pictureId: picture.value.id
+  }
+  // 如果有spaceId，一并传递
+  if (picture.value.spaceId) {
+    query.spaceId = picture.value.spaceId
+  }
+  router.push({
+    path: '/ai/generate',
+    query
   })
 }
 const getPictureDetail = async () => {

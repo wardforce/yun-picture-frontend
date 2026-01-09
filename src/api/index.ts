@@ -6,11 +6,15 @@ import * as userController from './userController'
 import * as spaceController from './spaceController'
 import * as pictureController from './pictureController'
 import * as fileController from './fileController'
+import * as chatHistoryController from './chatHistoryController'
+import * as aiPictureGeneratorController from './aiPictureGeneratorController'
 import * as mainController from './mainController'
 export default {
   userController,
   spaceController,
   pictureController,
   fileController,
+  chatHistoryController,
+  aiPictureGeneratorController,
   mainController,
 }

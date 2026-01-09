@@ -83,6 +83,12 @@ const router = createRouter({
       component: SearchPicturePage,
     },
     {
+      path: '/ai/generate',
+      name: 'AI图片生成',
+      component: () => import('@/pages/AIGeneratePicturePage.vue'),
+      props: true,
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

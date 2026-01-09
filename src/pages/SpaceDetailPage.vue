@@ -5,6 +5,7 @@
       <a-sapce size="middle">
         <a-space>
           <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank">+ 创建图片</a-button>
+          <a-button type="primary" ghost :icon="h(RobotOutlined)" @click="goToAiGenerate">AI绘图</a-button>
           <a-button :icon="h(EditOutlined)" @click="doBatchEdit">批量编辑</a-button>
           <a-tooltip :title="`${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
             <a-progress type="circle" :percent="((space.totalSize / space.maxSize) * 100).toFixed(1)" :size="42" />
@@ -31,19 +32,21 @@
 
 <script setup lang="ts">
 import { ref, onMounted, h } from 'vue'
+import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { getSpaceVoById } from '@/api/spaceController'
 import { listPictureVoByPage, searchPictureByColor } from '@/api/pictureController'
 import { formatSize } from '@/utils'
 import { ColorPicker } from 'vue3-colorpicker'
 import 'vue3-colorpicker/style.css'
-import { EditOutlined } from '@ant-design/icons-vue'
+import { EditOutlined, RobotOutlined } from '@ant-design/icons-vue'
 interface Props {
   id: number | string
 }
 
 const space = ref<API.SpaceVO>({})
 const props = defineProps<Props>()
+const router = useRouter()
 
 const getSpaceDetail = async () => {
   try {
@@ -134,6 +137,14 @@ const doBatchEdit = () => {
   if (batchEditPictureModelRef.value) {
     batchEditPictureModelRef.value.openModal()
   }
+}
+
+// 跳转到AI生成页，传递spaceId
+const goToAiGenerate = () => {
+  router.push({
+    path: '/ai/generate',
+    query: { spaceId: props.id }
+  })
 }
 </script>
 

@@ -188,20 +188,34 @@ const originItems = [
     title: '空间管理',
   },
   {
+    key: '/ai/generate',
+    label: 'AI图片生成',
+    title: 'AI图片生成',
+  },
+  {
     key: 'others',
     label: h('a', { href: 'https://github.com/wardforce', target: '_blank' }, 'GitHub'),
     title: '关于作者',
   },
 ]
-// 管理员才能看到admin菜单
+// 统一过滤菜单：管理员权限 + AI功能登录要求
 const filterMenus = (menus = [] as MenuProps['items']) => {
   return menus?.filter((menu) => {
-    if (menu?.key?.startsWith('/admin') && loginUserStore.loginUser.userRole !== 'admin') {
+    const key = menu?.key
+    if (typeof key !== 'string') return true
+
+    // 过滤管理员菜单
+    if (key.startsWith('/admin') && loginUserStore.loginUser.userRole !== 'admin') {
+      return false
+    }
+    // 过滤AI功能菜单（需要登录）
+    if (key.startsWith('/ai') && !loginUserStore.loginUser.id) {
       return false
     }
     return true
   })
 }
+
 const items = computed(() => filterMenus(originItems))
 /**
  * 用户退出
