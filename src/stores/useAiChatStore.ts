@@ -366,18 +366,18 @@ export const useAiChatStore = defineStore('aiChat', () => {
       }
     }
     // 兼容更老的数据结构（直接在detail上的pictureId）
-    else if (detail.pictureId) {
-      const { url, thumbnailUrl } = await resolvePictureUrl(detail.pictureId)
-      pictures.push({
-        id: 0,
-        pictureId: detail.pictureId,
-        url,
-        thumbnailUrl,
-        type: 'output',
-        sortOrder: 0,
-      })
-    }
-
+    // else if (detail.pictureId) {
+    //   const { url, thumbnailUrl } = await resolvePictureUrl(detail.pictureId)
+    //   pictures.push({
+    //     id: 0,
+    //     pictureId: detail.pictureId,
+    //     url,
+    //     thumbnailUrl,
+    //     type: 'output',
+    //     sortOrder: 0,
+    //   })
+    // }
+    //删除这行的原因是为了能够更好的做到加载。
     return {
       id: detail.id || 0,
       content: detail.message || '',

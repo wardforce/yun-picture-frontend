@@ -18,25 +18,19 @@
 
     <!-- 消息列表 -->
     <div class="messages-container">
-      <div
-        v-for="msg in messages"
-        :key="msg.id"
-        :class="['message-item', msg.placement === 'end' ? 'message-user' : 'message-ai']"
-      >
+      <div v-for="msg in messages" :key="msg.id"
+        :class="['message-item', msg.placement === 'end' ? 'message-user' : 'message-ai']">
         <!-- 头像 -->
         <div class="message-avatar">
           <a-avatar v-if="msg.type === 'user'" :size="36">
-            <a-avatar
-              v-if="loginUserStore.loginUser.userAvatar"
-              :src="loginUserStore.loginUser.userAvatar"
-              size="large"
-              ><template #icon> <AntDesignOutlined /> </template
-            ></a-avatar>
-            <a-avatar v-else size="large"
-              ><template #icon>
+            <a-avatar v-if="loginUserStore.loginUser.userAvatar" :src="loginUserStore.loginUser.userAvatar"
+              size="large"><template #icon>
+                <AntDesignOutlined />
+              </template></a-avatar>
+            <a-avatar v-else size="large"><template #icon>
                 {{ loginUserStore.loginUser.userName?.[0] ?? 'momo' }}
-                <AntDesignOutlined /> </template
-            ></a-avatar>
+                <AntDesignOutlined />
+              </template></a-avatar>
           </a-avatar>
           <a-avatar v-else :size="36" style="background-color: #1890ff">
             <template #icon>
@@ -50,15 +44,10 @@
           <!-- 图片Grid -->
           <div v-if="msg.pictures.length > 0" class="pictures-grid">
             <div v-for="pic in msg.pictures" :key="pic.id" class="picture-wrapper">
-              <img
-                :src="pic.url"
-                :data-fallback="pic.thumbnailUrl"
-                :alt="pic.type"
-                @error="handleImageError"
-                @click="previewImage(pic.url)"
-              />
+              <img :src="pic.url" :data-fallback="pic.thumbnailUrl" :alt="pic.type" @error="handleImageError"
+                @click="previewImage(pic.url)" />
               <span class="picture-badge" :class="pic.type">
-                {{ pic.type === 'INPUT' ? '参考图' : '生成图' }}
+                {{ pic.type?.toLowerCase() === 'input' ? '参考图' : '生成图' }}
               </span>
             </div>
           </div>
@@ -91,14 +80,10 @@
     </div>
 
     <!-- 图片预览 -->
-    <a-image
-      :style="{ display: 'none' }"
-      :preview="{
-        visible: previewVisible,
-        onVisibleChange: (vis: boolean) => (previewVisible = vis),
-      }"
-      :src="previewUrl"
-    />
+    <a-image :style="{ display: 'none' }" :preview="{
+      visible: previewVisible,
+      onVisibleChange: (vis: boolean) => (previewVisible = vis),
+    }" :src="previewUrl" />
   </div>
 </template>
 
@@ -302,9 +287,11 @@ watch(
 .message-text :deep(p) {
   margin: 0 0 8px 0;
 }
+
 .message-text :deep(p:last-child) {
   margin-bottom: 0;
 }
+
 .message-text :deep(code) {
   background: rgba(0, 0, 0, 0.06);
   padding: 2px 6px;
@@ -312,6 +299,7 @@ watch(
   font-family: 'Consolas', monospace;
   font-size: 0.9em;
 }
+
 .message-text :deep(pre) {
   background: #f6f8fa;
   padding: 12px;
@@ -319,21 +307,25 @@ watch(
   overflow-x: auto;
   margin: 8px 0;
 }
+
 .message-text :deep(pre code) {
   background: none;
   padding: 0;
 }
+
 .message-text :deep(ul),
 .message-text :deep(ol) {
   margin: 8px 0;
   padding-left: 20px;
 }
+
 .message-text :deep(blockquote) {
   border-left: 3px solid #ddd;
   margin: 8px 0;
   padding-left: 12px;
   color: #666;
 }
+
 .message-text :deep(a) {
   color: #1890ff;
 }
@@ -342,13 +334,16 @@ watch(
 .message-user .message-text :deep(code) {
   background: rgba(255, 255, 255, 0.2);
 }
+
 .message-user .message-text :deep(pre) {
   background: rgba(255, 255, 255, 0.15);
 }
+
 .message-user .message-text :deep(a) {
   color: #fff;
   text-decoration: underline;
 }
+
 .message-user .message-text :deep(blockquote) {
   border-left-color: rgba(255, 255, 255, 0.5);
   color: rgba(255, 255, 255, 0.85);
@@ -388,6 +383,7 @@ watch(
 }
 
 @keyframes bounce {
+
   0%,
   80%,
   100% {
