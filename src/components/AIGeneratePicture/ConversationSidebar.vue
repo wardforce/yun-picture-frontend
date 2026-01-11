@@ -18,10 +18,22 @@
                 <div v-for="session in sessionList" :key="session.sessionId"
                     :class="['session-item', { active: session.sessionId === currentSessionId }]"
                     @click="handleSessionClick(session)" @contextmenu.prevent="handleContextMenu($event, session)">
-                    <div class="session-title">
-                        {{ truncateText(session.firstPrompt || '新对话', 30) }}
+                    <div class="session-info">
+                        <div class="session-title">
+                            {{ truncateText(session.firstPrompt || '新对话', 30) }}
+                        </div>
+                        <div class="session-time">{{ formatTime(session.firstChatTime) }}</div>
                     </div>
-                    <div class="session-time">{{ formatTime(session.firstChatTime) }}</div>
+                    <a-dropdown :trigger="['click']" @click.stop>
+                        <DashOutlined class="session-action-icon" @click.stop />
+                        <template #overlay>
+                            <a-menu>
+                                <a-menu-item key="delete" danger @click="confirmDeleteSession(session)">
+                                    <DeleteOutlined /> 删除会话
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
                 </div>
             </a-spin>
         </div>
@@ -51,7 +63,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAiChatStore } from '@/stores/useAiChatStore'
-import { PlusOutlined, DeleteOutlined } from '@ant-design/icons-vue'
+import { PlusOutlined, DeleteOutlined, DashOutlined } from '@ant-design/icons-vue'
 import { Empty, Modal, message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 
@@ -89,20 +101,25 @@ function handleMenuClick({ key }: { key: string }) {
     contextMenuVisible.value = false
 
     if (key === 'delete' && selectedSession.value?.sessionId) {
-        Modal.confirm({
-            title: '确认删除',
-            content: '删除后将无法恢复，确定要删除这个会话吗？',
-            okText: '确定',
-            cancelText: '取消',
-            okType: 'danger',
-            onOk: async () => {
-                if (selectedSession.value?.sessionId) {
-                    await store.deleteSession(selectedSession.value.sessionId)
-                    message.success('删除成功')
-                }
-            }
-        })
+        confirmDeleteSession(selectedSession.value)
     }
+}
+
+// 确认删除会话
+function confirmDeleteSession(session: API.ChatHistorySessionVO) {
+    Modal.confirm({
+        title: '确认删除',
+        content: '删除后将无法恢复，确定要删除这个会话吗？',
+        okText: '确定',
+        cancelText: '取消',
+        okType: 'danger',
+        onOk: async () => {
+            if (session.sessionId) {
+                await store.deleteSession(String(session.sessionId))
+                message.success('删除成功')
+            }
+        }
+    })
 }
 
 // 点击其他地方关闭右键菜单
@@ -165,11 +182,19 @@ onUnmounted(() => {
 }
 
 .session-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 12px;
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: 4px;
     transition: background 0.2s;
+}
+
+.session-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .session-item:hover {
@@ -193,5 +218,23 @@ onUnmounted(() => {
 .session-time {
     font-size: 12px;
     color: #999;
+}
+
+.session-action-icon {
+    flex-shrink: 0;
+    opacity: 0;
+    cursor: pointer;
+    color: #999;
+    padding: 4px;
+    margin-left: 8px;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.session-item:hover .session-action-icon {
+    opacity: 1;
+}
+
+.session-action-icon:hover {
+    color: #ff4d4f;
 }
 </style>

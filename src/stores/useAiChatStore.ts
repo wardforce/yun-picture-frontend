@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { generateAiImage } from '@/api/aiPictureGeneratorController'
-import { listMySession, getSessionDetail, deleteBySession } from '@/api/chatHistoryController'
+import { listMySession, getSessionDetail, deleteBySession, deleteById } from '@/api/chatHistoryController'
 import { getPictureVoById } from '@/api/pictureController'
 
 // ViewModel类型定义
@@ -273,6 +273,18 @@ export const useAiChatStore = defineStore('aiChat', () => {
     }
   }
 
+  // 删除单条消息
+  async function deleteMessage(id: number) {
+    try {
+      const res = await deleteById({ id })
+      if (res.data.code === 0 && currentSessionId.value) {
+        await loadSessionDetail(currentSessionId.value)
+      }
+    } catch (error) {
+      console.error('删除消息失败:', error)
+    }
+  }
+
   // 新建对话
   function newConversation() {
     currentSessionId.value = null
@@ -424,6 +436,7 @@ export const useAiChatStore = defineStore('aiChat', () => {
     loadPictureById,
     sendMessage,
     deleteSession,
+    deleteMessage,
     newConversation,
     addPendingPicture,
     removePendingPicture,

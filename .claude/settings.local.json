@@ -5,7 +5,9 @@
       "Bash(git add:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(chat\\): 添加消息 Markdown 渲染支持\n\n- 新增 markdown-it 依赖用于解析 Markdown\n- 创建 renderMarkdown 工具函数，配置安全选项\\(html:false\\)\n- ChatArea 消息文本改用 v-html 渲染 Markdown\n- 添加代码块、列表、引用等 Markdown 样式\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(openspec list:*)",
-      "Bash(openspec --help:*)"
+      "Bash(openspec --help:*)",
+      "Skill(planning-with-files)",
+      "Skill(planning-with-files:*)"
     ]
   }
 }

@@ -45,7 +45,7 @@
           <div v-if="msg.pictures.length > 0" class="pictures-grid">
             <div v-for="pic in msg.pictures" :key="pic.id" class="picture-wrapper">
               <img :src="pic.url" :data-fallback="pic.thumbnailUrl" :alt="pic.type" @error="handleImageError"
-                @click="previewImage(pic.url)" />
+                @click="previewImage(pic.pictureId)" />
               <span class="picture-badge" :class="pic.type">
                 {{ pic.type?.toLowerCase() === 'input' ? '参考图' : '生成图' }}
               </span>
@@ -56,7 +56,19 @@
           <div v-if="msg.content" class="message-text" v-html="renderMarkdown(msg.content)"></div>
 
           <!-- 时间戳 -->
-          <div class="message-time">{{ formatTime(msg.createTime) }}</div>
+          <div class="message-footer">
+            <div class="message-time">{{ formatTime(msg.createTime) }}</div>
+            <a-dropdown :trigger="['click']">
+              <DashOutlined class="action-icon" />
+              <template #overlay>
+                <a-menu>
+                  <a-menu-item key="delete" danger @click="handleDeleteMessage(msg.id)">
+                    <DeleteOutlined /> 删除
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+          </div>
         </div>
       </div>
 
@@ -90,10 +102,12 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, watch } from 'vue'
 import { useAiChatStore, type ChatMessageVM } from '@/stores/useAiChatStore'
-import { UserOutlined, RobotOutlined } from '@ant-design/icons-vue'
+import { UserOutlined, RobotOutlined, DashOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import { renderMarkdown } from '@/utils/markdown'
+import { Modal, message } from 'ant-design-vue'
 import dayjs from 'dayjs'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
+import router from '@/router'
 const loginUserStore = useLoginUserStore()
 
 loginUserStore.loginUser
@@ -109,9 +123,8 @@ const isGenerating = computed(() => store.isGenerating)
 const previewVisible = ref(false)
 const previewUrl = ref('')
 
-function previewImage(url: string) {
-  previewUrl.value = url
-  previewVisible.value = true
+function previewImage(id: number) {
+  router.push({ path: `/picture/${id}` })
 }
 
 // 加载更多消息
@@ -148,6 +161,21 @@ function formatTime(dateStr: string): string {
   } else {
     return date.format('YYYY-MM-DD HH:mm')
   }
+}
+
+// 删除消息
+function handleDeleteMessage(id: number) {
+  Modal.confirm({
+    title: '确认删除',
+    content: '确定要删除这条消息吗？',
+    okText: '确定',
+    cancelText: '取消',
+    okType: 'danger',
+    onOk: async () => {
+      await store.deleteMessage(id)
+      message.success('删除成功')
+    }
+  })
 }
 
 // 自动滚动到底部
@@ -352,12 +380,43 @@ watch(
 .message-time {
   font-size: 11px;
   color: #999;
+}
+
+.message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
   margin-top: 4px;
-  text-align: right;
+}
+
+.action-icon {
+  cursor: pointer;
+  color: #999;
+  font-size: 14px;
+  padding: 2px;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.message-content:hover .action-icon {
+  opacity: 1;
+}
+
+.action-icon:hover {
+  color: #1890ff;
 }
 
 .message-user .message-time {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.message-user .action-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.message-user .action-icon:hover {
+  color: #fff;
 }
 
 /* 加载动画 */

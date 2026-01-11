@@ -65,9 +65,6 @@
             <a-button v-if="canEdit" :icon="h(EditOutlined)" type="default" @click="doEdit">
               编辑
             </a-button>
-            <a-button :icon="h(RobotOutlined)" type="primary" ghost @click="doAiEdit">
-              AI编辑
-            </a-button>
             <a-button v-if="canEdit" :icon="h(DeleteOutlined)" danger @click="doDelete">
               删除
             </a-button>
