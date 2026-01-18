@@ -51,6 +51,7 @@ declare module 'vue' {
     AProgress: typeof import('ant-design-vue/es')['Progress']
     AQrcode: typeof import('ant-design-vue/es')['QRCode']
     ARadio: typeof import('ant-design-vue/es')['Radio']
+    ARadioButton: typeof import('ant-design-vue/es')['RadioButton']
     ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
     ARangePicker: typeof import('ant-design-vue/es')['RangePicker']
     ARow: typeof import('ant-design-vue/es')['Row']
@@ -92,7 +93,9 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ShareModel: typeof import('./src/components/ShareModel.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
+    UpdataPassword: typeof import('./src/components/user/UpdataPassword.vue')['default']
     UrlPictureUpload: typeof import('./src/components/UrlPictureUpload.vue')['default']
+    UserInfo: typeof import('./src/components/user/UserInfo.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }

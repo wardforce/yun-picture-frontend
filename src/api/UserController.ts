@@ -26,6 +26,48 @@ export async function deleteUser(body: API.DeleteRequest, options?: { [key: stri
   })
 }
 
+/** 邮箱验证码登录 使用邮箱和验证码进行登录 POST /user/email/login */
+export async function emailLogin(body: API.EmailLoginRequest, options?: { [key: string]: any }) {
+  return request<any>('/user/email/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 邮箱验证码重置密码 使用邮箱验证码重置密码 POST /user/email/resetPassword */
+export async function emailResetPassword(
+  body: API.EmailResetPasswordRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/user/email/resetPassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 发送邮箱验证码 发送邮箱验证码用于登录或重置密码 POST /user/email/sendCode */
+export async function sendEmailCode(
+  body: API.EmailSendCodeRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/user/email/sendCode', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 根据 id 获取用户（仅管理员） 管理员根据 id 获取用户详情 GET /user/get */
 export async function getUserById(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

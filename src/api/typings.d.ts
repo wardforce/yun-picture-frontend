@@ -279,6 +279,31 @@ declare namespace API {
     id?: number
   }
 
+  type EmailLoginRequest = {
+    /** 邮箱地址 */
+    email?: string
+    /** 验证码 */
+    code?: string
+  }
+
+  type EmailResetPasswordRequest = {
+    /** 邮箱地址 */
+    email?: string
+    /** 验证码 */
+    code?: string
+    /** 新密码 */
+    newPassword?: string
+    /** 确认密码 */
+    checkPassword?: string
+  }
+
+  type EmailSendCodeRequest = {
+    /** 邮箱地址 */
+    email?: string
+    /** 验证码类型: LOGIN/RESET_PASSWORD */
+    codeType?: string
+  }
+
   type generatePictureParams = {
     prompt: string
   }

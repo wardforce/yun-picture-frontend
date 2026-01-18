@@ -14,8 +14,8 @@
         <a-input-password v-model:value="formState.userPassword" placeholder="请输入密码" />
       </a-form-item>
       <div class="tips">
-        没有账号？
-        <router-link to="/user/register">去注册</router-link>
+        <router-link to="/user/email-login" class="email-login">邮箱登录</router-link>
+        <span>没有账号？<router-link to="/user/register">去注册</router-link></span>
       </div>
       <a-form-item :wrapper-col="{ span: 24 }">
         <a-button type="primary" html-type="submit" style="width: 100%;">登录</a-button>
@@ -77,6 +77,12 @@ const onFinishFailed = (errorInfo: any) => {
 .tips {
   font-size: 13px;
   margin: 16px;
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.email-login {
+  color: #1890ff;
 }
 </style>
