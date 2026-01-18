@@ -24,7 +24,12 @@
           - :items 传入菜单数据（见 script 部分 items）
           - @click 绑定点击事件（参数通常为 { key }）
         -->
-        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="doMenuClick" />
+        <a-menu
+          v-model:selectedKeys="current"
+          mode="horizontal"
+          :items="items"
+          @click="doMenuClick"
+        />
       </a-col>
 
       <!-- 右侧：登录按钮（跳转到用户登录页面） -->
@@ -33,19 +38,24 @@
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-              <a-avatar v-if="loginUserStore.loginUser.userAvatar" :src="loginUserStore.loginUser.userAvatar"
-                size="large"><template #icon>
-                  <AntDesignOutlined />
-                </template></a-avatar>
-              <a-avatar v-else size="large"><template #icon>
+              <a-avatar
+                v-if="loginUserStore.loginUser.userAvatar"
+                :src="loginUserStore.loginUser.userAvatar"
+                size="large"
+                ><template #icon> <AntDesignOutlined /> </template
+              ></a-avatar>
+              <a-avatar v-else size="large"
+                ><template #icon>
                   {{ loginUserStore.loginUser.userName?.[0] ?? 'momo' }}
-                  <AntDesignOutlined />
-                </template></a-avatar>
+                  <AntDesignOutlined /> </template
+              ></a-avatar>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <UserOutlined />
-                    <a href="javascript:;">个人中心</a>
+                    <router-link to="/user/mainPage">
+                      <UserOutlined />
+                      个人中心
+                    </router-link>
                   </a-menu-item>
                   <a-menu-item>
                     <HeartOutlined />
@@ -73,7 +83,6 @@
                     <LogoutOutlined />
                     <a href="javascript:;">退出登录</a>
                   </a-menu-item>
-
                 </a-menu>
               </template>
             </a-dropdown>

@@ -31,6 +31,11 @@ const router = createRouter({
       component: UserRegisterPage,
     },
     {
+      path: '/user/email-login',
+      name: '邮箱登录',
+      component: () => import('@/pages/user/UserEmailLoginPage.vue'),
+    },
+    {
       path: '/admin/userManage',
       name: '用户管理',
       component: UserManagePage,
@@ -86,6 +91,12 @@ const router = createRouter({
       path: '/ai/generate',
       name: 'AI图片生成',
       component: () => import('@/pages/AIGeneratePicturePage.vue'),
+      props: true,
+    },
+    {
+      path: '/user/mainPage',
+      name: '用户主页面',
+      component: () => import('@/pages/user/UserPae.vue'),
       props: true,
     },
     {

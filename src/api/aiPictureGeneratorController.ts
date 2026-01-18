@@ -2,10 +2,10 @@
 /* eslint-disable */
 import request from '@/request'
 
-/** AI生成图片 调用AI生成图片 POST /ai_picture_generator/generate_ai_image */
+/** AI生成图片 第二阶段：调用AI生成图片 POST /ai_picture_generator/generate_ai_image */
 export async function generateAiImage(
   body: API.CreateChatRequest,
-  options?: { [key: string]: any },
+  options?: { [key: string]: any }
 ) {
   return request<API.BaseResponseAiGenerateResponse>('/ai_picture_generator/generate_ai_image', {
     method: 'POST',
@@ -23,7 +23,7 @@ export async function generatePicture(
   params: API.generatePictureParams,
   body: {},
   file?: File,
-  options?: { [key: string]: any },
+  options?: { [key: string]: any }
 ) {
   const formData = new FormData()
 
