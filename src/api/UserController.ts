@@ -14,6 +14,53 @@ export async function addUser(body: API.UserAddRequest, options?: { [key: string
   })
 }
 
+/** 上传用户头像 用户通过文件上传头像 POST /user/avatar/upload */
+export async function uploadAvatar(body: {}, file?: File, options?: { [key: string]: any }) {
+  const formData = new FormData()
+
+  if (file) {
+    formData.append('file', file)
+  }
+
+  Object.keys(body).forEach((ele) => {
+    const item = (body as any)[ele]
+
+    if (item !== undefined && item !== null) {
+      if (typeof item === 'object' && !(item instanceof File)) {
+        if (item instanceof Array) {
+          item.forEach((f) => formData.append(ele, f || ''))
+        } else {
+          formData.append(ele, new Blob([JSON.stringify(item)], { type: 'application/json' }))
+        }
+      } else {
+        formData.append(ele, item)
+      }
+    }
+  })
+
+  return request<any>('/user/avatar/upload', {
+    method: 'POST',
+    data: formData,
+    requestType: 'form',
+    ...(options || {}),
+  })
+}
+
+/** 通过URL上传用户头像 用户通过URL上传头像 POST /user/avatar/upload/url */
+export async function uploadAvatarByUrl(
+  body: API.UploadAvatarRequest,
+  options?: { [key: string]: any }
+) {
+  return request<any>('/user/avatar/upload/url', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 删除用户 管理员删除用户 POST /user/delete */
 export async function deleteUser(body: API.DeleteRequest, options?: { [key: string]: any }) {
   return request<any>('/user/delete', {

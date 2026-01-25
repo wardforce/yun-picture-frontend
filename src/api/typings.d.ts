@@ -778,6 +778,11 @@ declare namespace API {
     filepath: string
   }
 
+  type UploadAvatarRequest = {
+    /** 头像文件URL */
+    fileUrl: string
+  }
+
   type uploadPictureByUrlParams = {
     /** 图片上传请求体中的元信息，如名称/标签/分类等 */
     pictureUploadRequest?: any
