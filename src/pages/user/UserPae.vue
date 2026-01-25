@@ -5,11 +5,11 @@
         v-if="loginUserStore.loginUser.userAvatar"
         :src="loginUserStore.loginUser.userAvatar"
         :size="80"
-        @clikc="doAvatarClick"
+        @click="doAvatarClick"
       >
         <template #icon><AntDesignOutlined /></template>
       </a-avatar>
-      <a-avatar v-else :size="80" @clikc="doAvatarClick">
+      <a-avatar v-else :size="80" @click="doAvatarClick">
         <template #icon>
           {{ loginUserStore.loginUser.userName?.[0] ?? '游' }}
         </template>
