@@ -34,7 +34,7 @@ import UpdataPassword from '@/components/user/UpdataPassword.vue'
 import { AntDesignOutlined } from '@ant-design/icons-vue'
 
 const loginUserStore = useLoginUserStore()
-//切换头像方法，后端没有实现，先空着
+
 const doAvatarClick = () => {}
 
 onMounted(() => {
