@@ -1,4 +1,4 @@
-import { getLoginUser } from '@/api/userController'
+import { getLoginUser } from '@/api/UserController'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -14,13 +14,6 @@ export const useLoginUserStore = defineStore('loginUser', () => {
     if (res.data.code === 0 && res.data.data) {
       loginUser.value = res.data.data
     }
-    // //测试用户登录
-    // setTimeout(() => {
-    //   loginUser.value = {
-    //     id: 1,
-    //     userName: '测试用户',
-    //   }
-    // }, 3000)
   }
 
   function setLoginUser(newLoginUser: any) {
