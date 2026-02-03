@@ -49,7 +49,8 @@ interface Props {
   imageUrl?: string
   picture?: API.PictureVO
   spaceId?: number
-  onSuccess?: (picture: API.PictureVO) => void
+  onSuccess?: (data: any) => void
+  uploadApi?: (file: File) => Promise<any>
 }
 
 const props = defineProps<Props>()
@@ -88,9 +89,15 @@ const handleConfirm = () => {
 const handleUpload = async ({ file }: any) => {
   loading.value = true
   try {
-    const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
-    params.spaceId = props.spaceId
-    const res = await uploadPicture(params, {}, file)
+    let res
+    if (props.uploadApi) {
+      res = await props.uploadApi(file)
+    } else {
+      const params: API.PictureUploadRequest = props.picture ? { id: props.picture.id } : {}
+      params.spaceId = props.spaceId
+      res = await uploadPicture(params, {}, file)
+    }
+
     if (res.data.code === 0 && res.data.data) {
       message.success('图片上传成功')
       // 将上传成功的图片信息传递给父组件

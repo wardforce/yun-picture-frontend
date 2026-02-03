@@ -9,7 +9,8 @@
       "Skill(planning-with-files)",
       "Skill(planning-with-files:*)",
       "mcp__mcp_route4claude__zhi",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__mcp_route4claude__interactive_feedback"
     ]
   }
 }
