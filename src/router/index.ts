@@ -100,6 +100,12 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/space_analyze',
+      name: '空间分析',
+      component: () => import('@/pages/SpaceAnalyzePage.vue'),
+      props: true,
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

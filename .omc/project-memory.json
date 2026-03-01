@@ -1,0 +1,203 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1772340269947,
+  "projectRoot": "e:\\project\\yun-picture\\yun-picture-frontend",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "vue",
+        "version": "3.5.13",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "6.0.1",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "run-p type-check \"build-only {@}\" --",
+      "pure-build": "vite build --mode production",
+      "openapi": "node openapi.config.js",
+      "preview": "vite preview",
+      "build-only": "vite build",
+      "type-check": "vue-tsc --build",
+      "lint": "eslint . --fix",
+      "format": "prettier --write src/"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "public",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 2,
+      "lastAccessed": 1772340269869,
+      "keyFiles": [
+        "favicon.ico",
+        "index.html"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 0,
+      "lastAccessed": 1772340269869,
+      "keyFiles": []
+    },
+    "openspec": {
+      "path": "openspec",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1772340269916,
+      "keyFiles": [
+        "AGENTS.md",
+        "project.md"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 1,
+      "lastAccessed": 1772340269917,
+      "keyFiles": [
+        "favicon.ico"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 4,
+      "lastAccessed": 1772340269917,
+      "keyFiles": [
+        "accesss.ts",
+        "App.vue",
+        "main.ts",
+        "request.ts"
+      ]
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 0,
+      "lastAccessed": 1772340269918,
+      "keyFiles": []
+    },
+    "dist\\assets": {
+      "path": "dist\\assets",
+      "purpose": "Static assets",
+      "fileCount": 12,
+      "lastAccessed": 1772340269918,
+      "keyFiles": [
+        "AboutView-DDQrHx--.js",
+        "AboutView-DhlS7raN.css",
+        "AIGeneratePicturePage-BTb0A8Fn.css"
+      ]
+    },
+    "src\\api": {
+      "path": "src\\api",
+      "purpose": "API routes",
+      "fileCount": 10,
+      "lastAccessed": 1772340269920,
+      "keyFiles": [
+        "aiPictureGeneratorController.ts",
+        "chatHistoryController.ts",
+        "fileController.ts"
+      ]
+    },
+    "src\\assets": {
+      "path": "src\\assets",
+      "purpose": "Static assets",
+      "fileCount": 2,
+      "lastAccessed": 1772340269920,
+      "keyFiles": [
+        "logo.png",
+        "logo.svg"
+      ]
+    },
+    "src\\components": {
+      "path": "src\\components",
+      "purpose": "UI components",
+      "fileCount": 13,
+      "lastAccessed": 1772340269921,
+      "keyFiles": [
+        "BatchEditPictureModel.vue",
+        "GlobalHeader.vue",
+        "GlobalSider.vue"
+      ]
+    },
+    "src\\pages": {
+      "path": "src\\pages",
+      "purpose": "Page components",
+      "fileCount": 10,
+      "lastAccessed": 1772340269921,
+      "keyFiles": [
+        "AddPicturePage.vue",
+        "AddPicturePageByBatch.vue",
+        "AddSpacePage.vue"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "package.json",
+      "accessCount": 2,
+      "lastAccessed": 1772347934557,
+      "type": "file"
+    },
+    {
+      "path": "src\\components\\analyze\\SpaceCategoryAnalyze.vue",
+      "accessCount": 1,
+      "lastAccessed": 1772347019770,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

@@ -53,9 +53,39 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListSpace = {
+    code?: number
+    data?: Space[]
+    message?: string
+  }
+
+  type BaseResponseListSpaceCategoryAnalyzeResponse = {
+    code?: number
+    data?: SpaceCategoryAnalyzeResponse[]
+    message?: string
+  }
+
   type BaseResponseListSpaceLevel = {
     code?: number
     data?: SpaceLevel[]
+    message?: string
+  }
+
+  type BaseResponseListSpaceSizeAnalyzeResponse = {
+    code?: number
+    data?: SpaceSizeAnalyzeResponse[]
+    message?: string
+  }
+
+  type BaseResponseListSpaceTagAnalyzeResponse = {
+    code?: number
+    data?: SpaceTagAnalyzeResponse[]
+    message?: string
+  }
+
+  type BaseResponseListSpaceUserAnalyzeResponse = {
+    code?: number
+    data?: SpaceUserAnalyzeResponse[]
     message?: string
   }
 
@@ -134,6 +164,12 @@ declare namespace API {
   type BaseResponseSpace = {
     code?: number
     data?: Space
+    message?: string
+  }
+
+  type BaseResponseSpaceUsageAnalyzeResponse = {
+    code?: number
+    data?: SpaceUsageAnalyzeResponse
     message?: string
   }
 
@@ -728,6 +764,24 @@ declare namespace API {
     spaceLevel?: number
   }
 
+  type SpaceCategoryAnalyzeRequest = {
+    /** 空间 ID */
+    spaceId?: number
+    /** 是否查询公共图库 */
+    queryPublic?: boolean
+    /** 全空间分析 */
+    queryAll?: boolean
+  }
+
+  type SpaceCategoryAnalyzeResponse = {
+    /** 图片分类 */
+    category?: string
+    /** 图片数量 */
+    count?: number
+    /** 分类图片总大小 */
+    totalSize?: number
+  }
+
   type SpaceEditRequest = {
     id?: number
     spaceName?: string
@@ -751,12 +805,91 @@ declare namespace API {
     spaceLevel?: number
   }
 
+  type SpaceRankAnalyzeRequest = {
+    /** 排名前 N 的空间 */
+    topN?: number
+  }
+
+  type SpaceSizeAnalyzeRequest = {
+    /** 空间 ID */
+    spaceId?: number
+    /** 是否查询公共图库 */
+    queryPublic?: boolean
+    /** 全空间分析 */
+    queryAll?: boolean
+  }
+
+  type SpaceSizeAnalyzeResponse = {
+    /** 图片大小范围 */
+    sizeRange?: string
+    /** 图片数量 */
+    count?: number
+  }
+
+  type SpaceTagAnalyzeRequest = {
+    /** 空间 ID */
+    spaceId?: number
+    /** 是否查询公共图库 */
+    queryPublic?: boolean
+    /** 全空间分析 */
+    queryAll?: boolean
+  }
+
+  type SpaceTagAnalyzeResponse = {
+    /** 标签名称 */
+    tag?: string
+    /** 使用次数 */
+    count?: number
+  }
+
   type SpaceUpdateRequest = {
     id?: number
     spaceName?: string
     spaceLevel?: number
     maxSize?: number
     maxCount?: number
+  }
+
+  type SpaceUsageAnalyzeRequest = {
+    /** 空间 ID */
+    spaceId?: number
+    /** 是否查询公共图库 */
+    queryPublic?: boolean
+    /** 全空间分析 */
+    queryAll?: boolean
+  }
+
+  type SpaceUsageAnalyzeResponse = {
+    /** 已使用大小 */
+    usedSize?: number
+    /** 总大小 */
+    maxSize?: number
+    /** 空间使用比例 */
+    sizeUsageRatio?: number
+    /** 当前图片数量 */
+    usedCount?: number
+    /** 最大图片数量 */
+    maxCount?: number
+    /** 图片数量占比 */
+    countUsageRatio?: number
+  }
+
+  type SpaceUserAnalyzeRequest = {
+    /** 空间 ID */
+    spaceId?: number
+    /** 是否查询公共图库 */
+    queryPublic?: boolean
+    /** 全空间分析 */
+    queryAll?: boolean
+    /** 用户ID */
+    userId?: number
+    /** 时间维度 */
+    timeDimension?: 'day' | 'week' | 'month'
+  }
+
+  type SpaceUserAnalyzeResponse = {
+    period?: string
+    count?: number
   }
 
   type SpaceVO = {

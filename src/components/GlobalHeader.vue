@@ -24,12 +24,7 @@
           - :items 传入菜单数据（见 script 部分 items）
           - @click 绑定点击事件（参数通常为 { key }）
         -->
-        <a-menu
-          v-model:selectedKeys="current"
-          mode="horizontal"
-          :items="items"
-          @click="doMenuClick"
-        />
+        <a-menu v-model:selectedKeys="current" mode="horizontal" :items="items" @click="doMenuClick" />
       </a-col>
 
       <!-- 右侧：登录按钮（跳转到用户登录页面） -->
@@ -38,17 +33,14 @@
         <div class="user-login-status">
           <div v-if="loginUserStore.loginUser.id">
             <a-dropdown>
-              <a-avatar
-                v-if="loginUserStore.loginUser.userAvatar"
-                :src="loginUserStore.loginUser.userAvatar"
-                size="large"
-                ><template #icon> <AntDesignOutlined /> </template
-              ></a-avatar>
-              <a-avatar v-else size="large"
-                ><template #icon>
+              <a-avatar v-if="loginUserStore.loginUser.userAvatar" :src="loginUserStore.loginUser.userAvatar"
+                size="large"><template #icon>
+                  <AntDesignOutlined />
+                </template></a-avatar>
+              <a-avatar v-else size="large"><template #icon>
                   {{ loginUserStore.loginUser.userName?.[0] ?? 'momo' }}
-                  <AntDesignOutlined /> </template
-              ></a-avatar>
+                  <AntDesignOutlined />
+                </template></a-avatar>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
@@ -203,7 +195,7 @@ const originItems = [
   },
   {
     key: 'others',
-    label: h('a', { href: 'https://github.com/wardforce', target: '_blank' }, 'GitHub'),
+    label: h('a', { href: 'https://github.com/wardbit', target: '_blank' }, 'GitHub'),
     title: '关于作者',
   },
 ]
